@@ -22,6 +22,10 @@ class Persona
     #[ORM\Column(length: 10)]
     private ?string $dni = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $usuario = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Persona
     public function setDni(string $dni): static
     {
         $this->dni = $dni;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?User
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(User $usuario): static
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }

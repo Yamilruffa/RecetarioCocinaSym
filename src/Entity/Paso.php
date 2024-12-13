@@ -22,6 +22,9 @@ class Paso
     #[ORM\Column(length: 10)]
     private ?string $numero = null;
 
+    #[ORM\ManyToOne(inversedBy: 'pasos')]
+    private ?Receta $receta = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Paso
     public function setNumero(string $numero): static
     {
         $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getReceta(): ?Receta
+    {
+        return $this->receta;
+    }
+
+    public function setReceta(?Receta $receta): static
+    {
+        $this->receta = $receta;
 
         return $this;
     }
