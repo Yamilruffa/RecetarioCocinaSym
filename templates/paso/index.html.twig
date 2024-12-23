@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paso index{% endblock %}
+
+{% block body %}
+    <h1>Paso index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Numero</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paso in pasos %}
+            <tr>
+                <td>{{ paso.id }}</td>
+                <td>{{ paso.nombre }}</td>
+                <td>{{ paso.descripcion }}</td>
+                <td>{{ paso.numero }}</td>
+                <td>
+                    <a href="{{ path('app_paso_show', {'id': paso.id}) }}">show</a>
+                    <a href="{{ path('app_paso_edit', {'id': paso.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_paso_new') }}">Create new</a>
+{% endblock %}

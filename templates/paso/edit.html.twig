@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Paso{% endblock %}
+
+{% block body %}
+    <h1>Edit Paso</h1>
+
+    {{ include('paso/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_paso_index') }}">back to list</a>
+
+    {{ include('paso/_delete_form.html.twig') }}
+{% endblock %}

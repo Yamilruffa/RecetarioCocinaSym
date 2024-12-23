@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calificacion index{% endblock %}
+
+{% block body %}
+    <h1>Calificacion index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Calificacion</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for calificacion in calificacions %}
+            <tr>
+                <td>{{ calificacion.id }}</td>
+                <td>{{ calificacion.calificacion }}</td>
+                <td>
+                    <a href="{{ path('app_calificacion_show', {'id': calificacion.id}) }}">show</a>
+                    <a href="{{ path('app_calificacion_edit', {'id': calificacion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_calificacion_new') }}">Create new</a>
+{% endblock %}

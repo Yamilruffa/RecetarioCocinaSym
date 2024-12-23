@@ -46,11 +46,15 @@ class Receta
     #[ORM\JoinColumn(nullable: false)]
     private ?User $usuario = null;
 
+    #[ORM\OneToMany(targetEntity: Calificacion::class, mappedBy: 'receta')]
+    private Collection $calificacions;
+
     public function __construct()
     {
         $this->categoria = new ArrayCollection();
         $this->pasos = new ArrayCollection();
         $this->ingredientes = new ArrayCollection();
+        $this->calificacions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,5 +222,40 @@ class Receta
         $this->usuario = $usuario;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Calificacion>
+     */
+    public function getCalificacions(): Collection
+    {
+        return $this->calificacions;
+    }
+
+    public function addCalificacion(Calificacion $calificacion): static
+    {
+        if (!$this->calificacions->contains($calificacion)) {
+            $this->calificacions->add($calificacion);
+            $calificacion->setReceta($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalificacion(Calificacion $calificacion): static
+    {
+        if ($this->calificacions->removeElement($calificacion)) {
+            // set the owning side to null (unless already changed)
+            if ($calificacion->getReceta() === $this) {
+                $calificacion->setReceta(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->id ?? 'Sin id';
     }
 }

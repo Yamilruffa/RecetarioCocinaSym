@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Paso{% endblock %}
+
+{% block body %}
+    <h1>Create new Paso</h1>
+
+    {{ include('paso/_form.html.twig') }}
+
+    <a href="{{ path('app_paso_index') }}">back to list</a>
+{% endblock %}
