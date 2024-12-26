@@ -157,11 +157,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+    // el famoso to string
     public function __toString(): string
     {
         return (string) $this->id ?? 'Sin ID';
     }
 
+    
 
 }

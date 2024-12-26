@@ -1,0 +1,33 @@
+{% extends 'basehome.html.twig' %}
+
+{% block body %}
+<header>
+    <nav class="navbar">
+        <div class="logo">Recetas RosaBri</div>
+        <ul class="nav-links">
+            <li><a href="/Recetas Saladas">Recetas Saladas</a></li>
+            <li><a href="/Recetas Dulces">Recetas Dulces</a></li>
+            <li><a href="/categorias">Categorías</a></li>
+            
+            <li><a href="/sobre-nosotros">Sobre Nosotros</a></li>
+
+            {% if app.user %}
+                <li><b><span>{{ app.user.email }}</span></b></li>
+                <li><a href="{{ path('app_logout') }}">Cerrar sesión</a></li>
+            {% else %}
+                <!-- Mostrar solo si el usuario no está logueado -->
+                <li><a href="{{ path('app_registrospa') }}">Registrarse</a></li>
+                <li><a href="{{ path('app_login') }}">Iniciar Sesión</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<main class="homepage">
+    <section class="hero">
+        <h1>Bienvenido a Recetas RosaBri</h1>
+        <p>Descubre, comparte y disfruta recetas hogareñas.</p>
+        <a href="/recetas" class="btn">Explorar Recetas</a>
+    </section>
+</main>
+{% endblock %}

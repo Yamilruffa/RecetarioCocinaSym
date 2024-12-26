@@ -21,9 +21,10 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: app_perfiluser # Redirige después del login
             logout:
                 path: app_logout
-                # where to redirect after logout
+                target: app_home # Redirige después del logout
                 # target: app_any_route
 
             # activate different ways to authenticate

@@ -15,7 +15,7 @@ class PersonaType extends AbstractType
             ->add('nombre')
             ->add('apellido')
             ->add('dni')
-            ->add('usuario')
+            //->add('usuario')// lo oculto porque se lo paso automatico
         ;
     }
 

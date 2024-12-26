@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Persona{% endblock %}
+{% block title %}Registrarse!{% endblock %}
 
 {% block body %}
-    <h1>Create new Persona</h1>
+    <div class="form-container">
+        <h1>Ingrese sus datos</h1>
+        <fieldset>
+            <div class="formulario">
+        {{ include('persona/_form.html.twig') }}
 
-    {{ include('persona/_form.html.twig') }}
-
-    <a href="{{ path('app_persona_index') }}">back to list</a>
+        <a href="{{ path('app_persona_index') }}">back to list</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

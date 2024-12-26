@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar persona{% endblock %}
+
+{% block body %}
+    <div class="form-container">
+        <h1>Ingrese sus datos</h1>
+        <fieldset>
+            <div class="formulario">
+                {{ form_start(personaForm) }}
+                    {{ form_row(personaForm.nombre) }}
+                    {{ form_row(personaForm.apellido) }}
+                    {{ form_row(personaForm.dni) }}
+                    
+                    <button type="submit" class="btn">Registrar Persona</button>
+                {{ form_end(personaForm) }}
+            </div>
+        </fieldset>
+        <a href="{{ path('app_home') }}">Volver al inicio</a>
+    </div>
+{% endblock %}
