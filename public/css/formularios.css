@@ -5,7 +5,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f9f9;
+    background-color: #F2D4D4; /* Gris claro */
     font-size: 16px;
 }
 
@@ -24,7 +24,7 @@ body {
 .form-container h1 {
     font-size: 2em; /* Tamaño grande para el título */
     font-weight: bold;
-    color: #2a995f; /* Verde oscuro */
+    color: #e55039; /* Rojo */
     margin-bottom: 1em;
 }
 
@@ -48,7 +48,7 @@ body {
     width: 100%;
     padding: 0.75em 0;
     margin-top: 1.25em;
-    background-color: #38c172;
+    background-color: #e55039; /* Rojo */
     color: #ffffff;
     border: none;
     border-radius: 0.3125em;
@@ -59,12 +59,12 @@ body {
 }
 
 .btn:hover {
-    background-color: #2a995f;
+    background-color: #c0392b; /* Rojo más oscuro */
 }
 
 /* Errores de formulario */
 .formulario .form-error {
-    color: #e3342f;
+    color: #e3342f; /* Rojo */
     font-size: 0.75em;
     margin-top: -0.3125em;
 }
