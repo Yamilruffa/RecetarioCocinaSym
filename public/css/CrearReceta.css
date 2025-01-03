@@ -1,18 +1,7 @@
-/* Centrar el formulario en la página */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #F2D4D4;
-    font-size: 16px;
-}
-
 /* Contenedor del formulario y título */
 .form-container {
     text-align: center;
-    max-width: 25em; /* Aproximadamente 400px */
+    max-width: 50em; /* Aproximadamente 800px */
     background-color: #ffffff;
     padding: 2em;
     border: 0.1em solid #ced4da;
@@ -29,10 +18,7 @@ body {
 }
 
 /* Inputs del formulario */
-.formulario input[type="text"],
-.formulario input[type="email"],
-.formulario input[type="password"],
-.formulario textarea {
+.formulario-input {
     width: calc(100% - 1.25em);
     padding: 0.625em;
     margin: 0.625em 0;
@@ -81,9 +67,8 @@ body {
     background-color: #c0392b;
 }
 
-
 /* Errores de formulario */
-.formulario .form-error {
+.form-error {
     color: #e3342f; /* Rojo */
     font-size: 0.75em;
     margin-top: -0.3125em;
@@ -94,4 +79,3 @@ fieldset {
     border: none;
     padding: 0;
 }
-

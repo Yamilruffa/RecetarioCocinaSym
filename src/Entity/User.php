@@ -34,9 +34,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Receta::class, mappedBy: 'usuario', orphanRemoval: true)]
     private Collection $recetas;
 
+    #[ORM\ManyToMany(targetEntity: Receta::class)]
+    private Collection $RecetasFavoritas;
+
     public function __construct()
     {
         $this->recetas = new ArrayCollection();
+        $this->RecetasFavoritas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +165,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return (string) $this->id ?? 'Sin ID';
+    }
+
+    /**
+     * @return Collection<int, Receta>
+     */
+    public function getRecetasFavoritas(): Collection
+    {
+        return $this->RecetasFavoritas;
+    }
+
+    public function addRecetasFavorita(Receta $recetasFavorita): static
+    {
+        if (!$this->RecetasFavoritas->contains($recetasFavorita)) {
+            $this->RecetasFavoritas->add($recetasFavorita);
+        }
+
+        return $this;
+    }
+
+    public function removeRecetasFavorita(Receta $recetasFavorita): static
+    {
+        $this->RecetasFavoritas->removeElement($recetasFavorita);
+
+        return $this;
     }
 
     

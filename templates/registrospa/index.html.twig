@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registrar email!{% endblock %}
+{% block title %}Registrar Email{% endblock %}
 
 {% block body %}
     <div class="form-container">
@@ -13,9 +13,11 @@
                     {{ form_row(registrationForm.plainPassword) }}
                     {{ form_row(registrationForm.agreeTerms) }}
 
-                    <button type="submit" class="btn">Register</button>
+                    <button type="submit" class="btn">Registrarse</button>
                 {{ form_end(registrationForm) }}
             </div>
         </fieldset>
+        <a href="{{ path('app_home') }}" class="btn-back">Volver al inicio</a>
+
     </div>
 {% endblock %}

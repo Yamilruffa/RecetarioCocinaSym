@@ -6,6 +6,7 @@
 
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/CrearReceta.css') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -34,7 +35,7 @@
             <!-- Barra de navegación principal -->
             <ul class="left">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
-                <li><a href="#">Recetas RosaBri</a></li>
+                <li><a href="{{ path('app_home') }}">Recetas RosaBri</a></li>
             </ul>
 
             <ul class="center">
