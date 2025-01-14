@@ -23,27 +23,45 @@ class VistaRecetaController extends AbstractController
     #[Route('/new', name: 'app_vista_receta_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Crear una nueva receta
+        // Crear una nueva instancia de la entidad Receta
         $recetum = new Receta();
 
         // Obtener el usuario logueado
         $usuario = $this->getUser();
 
-        // Asignar el usuario logueado al campo oculto 'usuario'
+        // Validar que el usuario esté logueado
+        if (!$usuario) {
+            throw $this->createAccessDeniedException('Debes estar autenticado para crear una receta.');
+        }
+
+        // Asignar el usuario logueado a la receta
         $recetum->setUsuario($usuario);
 
         // Crear el formulario
         $form = $this->createForm(RecetaType::class, $recetum);
         $form->handleRequest($request);
 
-        // Procesar el formulario
         if ($form->isSubmitted() && $form->isValid()) {
-            // Persistir la receta en la base de datos
+            // Manejo de archivo (PNG)
+            $file = $form->get('png')->getData();
+            if ($file) {
+                $filename = uniqid() . '.png';
+                $file->move(
+                    $this->getParameter('kernel.project_dir') . '/public/RecetasIMG',
+                    $filename
+                );
+                $recetum->setPng('/RecetasIMG/' . $filename);
+            }
+
+            // Guardar la receta en la base de datos
             $entityManager->persist($recetum);
             $entityManager->flush();
 
-            // Redirigir a la lista de recetas después de guardar
-            return $this->redirectToRoute('app_vista_receta_index', [], Response::HTTP_SEE_OTHER);
+            // Agregar un mensaje de éxito
+            $this->addFlash('success', '¡Receta creada con éxito!');
+
+            // Redirigir a la creacion de pasos
+            return $this->redirectToRoute('app_Vista_Paso_new');
         }
 
         // Renderizar el formulario

@@ -13,6 +13,8 @@ use App\Entity\Categoria;
 use App\Entity\Ingrediente;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
 class RecetaType extends AbstractType
 {
@@ -20,7 +22,12 @@ class RecetaType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('png')
+            ->add('png', FileType::class, [
+                'label' => 'Imagen PNG',
+                'mapped' => false,  // No está mapeado directamente a la propiedad 'png' de la entidad
+                'required' => false, // No es obligatorio
+                'attr' => ['accept' => 'image/png'], // Solo permite imágenes PNG
+            ])
             ->add('descripcion')
             ->add('tiempoprep')
             ->add('porciones')
@@ -40,7 +47,8 @@ class RecetaType extends AbstractType
             ])
             //escondo el usuario
             ->add('usuario', HiddenType::class,[
-                'label'=> false
+                'label'=> false, // esto hace que no se muestre en el formulario, para que el usuario no lo pueda modificar.
+                'mapped'=> false // esto hace que el formulario no sobreescriva el valor de usuario que le pasamos de la pagina anterior.
             ])
 
         ;

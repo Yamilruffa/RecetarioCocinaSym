@@ -30,9 +30,19 @@
 
         {{ form_row(form.usuario, {'attr': {'class': 'formulario-input'}}) }}
 
-        <button type="submit" class="btn">{{ button_label|default('Save') }}</button>
+        <button type="submit" class="btn">{{ button_label|default('siguiente') }}</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_receta_index') }}" class="btn-back">Back to list</a>
+    <a href="{{ path('app_perfiluser') }}" class="btn-back">Volver</a>
+</div>
+
+<div class="instrucciones">
+    <h2>Instrucciones:</h2>
+    <ol>
+        <li>  Primero coloque el nombre de la receta.</li>
+        <li>  Luego, si lo desea y recomendamos, suba una imagen para su receta.</li>
+        <li>  Coloque una breve descripcion de su receta.</li>
+        <li>  complete los demas campos.</li>
+        <li>  A continuacion clikee siguiente.</li>
 </div>
 {% endblock %}
