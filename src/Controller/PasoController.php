@@ -68,14 +68,7 @@ class PasoController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_paso_delete', methods: ['POST'])]
-    public function delete(Request $request, Paso $paso, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$paso->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($paso);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('app_paso_index', [], Response::HTTP_SEE_OTHER);
-    }
+
+
 }

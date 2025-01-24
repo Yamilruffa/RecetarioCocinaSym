@@ -1,7 +1,97 @@
 {% extends 'basehome.html.twig' %}
 
-{% block title %} Mis Recetas{% endblock %}
+{% block title %} Mis Recetas {% endblock %}
 
 {% block body %}
+
+<!-- Tabla de recetas -->
+<table class="receta-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Imagen</th>
+            <th>Descripción</th>
+            <th>Tiempo de Preparación</th>
+            <th>Porciones</th>
+            <th>Dificultad</th>
+            <th>Pasos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recetum in recetas %}
+            <tr>
+                <td>{{ recetum.id }}</td>
+                <td>{{ recetum.nombre }}</td>
+                <td>
+                    {% if recetum.png %}
+                        <a href="#" class="image-link" data-image="{{ asset(recetum.png) }}">
+                            {{ recetum.png|split('/')|last }}
+                        </a>
+                    {% else %}
+                        <span>No disponible</span>
+                    {% endif %}
+                </td>
+                <td>{{ recetum.descripcion }}</td>
+                <td>{{ recetum.tiempoprep }}</td>
+                <td>{{ recetum.porciones }}</td>
+                <td>{{ recetum.dificultad }}</td>
+                <td>
+                    <!-- Botón para mostrar los pasos -->
+                    <button class="btn-pasos" onclick="openModal('modal-{{ recetum.id }}')">Ver pasos</button>
+                </td>
+                <td>
+                    <a href="{{ path('app_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
+                    <a href="{{ path('app_receta_edit', {'id': recetum.id}) }}" class="btn-edit">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="no-records">No se encontraron recetas</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Contenedor para los modales -->
+<div id="modals-container">
+    {% for recetum in recetas %}
+        <!-- Modal para los pasos -->
+        <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
+                <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
+                <table class="steps-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Paso</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paso in recetum.pasos %}
+                            <tr>
+                                <td>{{ paso.numero }}</td>
+                                <td>{{ paso.nombre }}</td>
+                                <td>{{ paso.descripcion }}</td>
+                                <td>
+                                    <a href="#" class="btn-edit">Editar</a>
+                                    <a href="#" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este paso?')">Eliminar</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">No hay pasos disponibles para esta receta.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

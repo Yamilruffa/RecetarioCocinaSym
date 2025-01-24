@@ -1,0 +1,417 @@
+/* Estilos para la tabla de recetas */
+.receta-table {
+    width: 90%; /* Ancho relativo para adaptarse a la pantalla */
+    margin: 2em auto; /* Centra horizontalmente y agrega margen vertical */
+    border: 5px solid #dd00ff; /* Contorno de color naranja intenso */
+    border-radius: 10px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que los bordes redondeados sean visibles */
+    background-color: #fff; /* Fondo blanco para contraste */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+}
+
+.receta-table th,
+.receta-table td {
+    padding: 15px; /* Espaciado interno */
+    text-align: left;
+    border: 1px solid #ddd; /* Líneas internas de las celdas */
+}
+
+.receta-table th {
+    background-color: #eaf7df; /* Fondo en tono pastel para encabezados */
+    font-weight: bold;
+    color: #333; /* Texto en color oscuro para contraste */
+}
+
+.receta-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alterna el color de las filas */
+}
+
+.receta-table tr:hover {
+    background-color: #ffe4c4; /* Resalta fila al pasar el cursor */
+}
+
+
+
+.receta-table th,
+.receta-table td {
+    padding: 1em; /* Espaciado interno proporcional */
+    text-align: left;
+    border: 0.1em solid #ddd; /* Bordes marcados para cada celda */
+}
+
+.receta-table th {
+    background-color: #eaf7df; /* Fondo en tono pastel para encabezados */
+    font-weight: bold;
+    color: #333; /* Texto en color oscuro para contraste */
+}
+
+.receta-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alterna el color de las filas */
+}
+
+.receta-table tr:hover {
+    background-color: #e4f0d8; /* Resalta fila al pasar el cursor */
+}
+
+.receta-img {
+    width: 3em; /* Ancho relativo para las imágenes */
+    height: 3em; /* Altura relativa */
+    object-fit: cover;
+    border: 0.1em solid #ddd; /* Borde alrededor de las imágenes */
+    border-radius: 0.3em; /* Bordes ligeramente redondeados */
+}
+
+.btn-show,
+.btn-edit {
+    padding: 0.5em 1em; /* Espaciado proporcional */
+    text-decoration: none;
+    border-radius: 0.5em;
+    font-size: 1rem; /* Tamaño de fuente relativo */
+    display: inline-block; /* Asegura el espaciado entre botones */
+}
+
+.btn-show {
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn-show:hover {
+    background-color: #45a049;
+}
+
+.btn-edit {
+    background-color: #ffa500;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #e68a00;
+}
+
+.no-records {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    padding: 1em; /* Espaciado en la celda sin registros */
+}
+
+/* Estilos para el modal de las imagenes */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    display: flex; /* Usamos flexbox para centrar */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    z-index: 1000; /* Asegura que esté en el frente */
+    display: none; /* Ocultamos el modal por defecto */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+    width: 90%; /* El contenedor ocupa un máximo del 90% del ancho */
+    max-width: 800px; /* Ancho máximo */
+    max-height: 90%; /* Altura máxima */
+    overflow-y: auto; /* Habilita scroll si el contenido es demasiado alto */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* Imagen dentro del modal */
+.modal-content img {
+    max-height: 90%; /* No excederá el 90% de la altura del contenedor */
+    max-width: 100%; /* La imagen no excede el ancho del contenedor */
+    object-fit: contain; /* Mantiene proporciones */
+    border-radius: 5px; /* Bordes redondeados opcionales */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */
+}
+
+/* Botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333; /* Color del botón cerrar */
+    transition: color 0.3s; /* Animación suave */
+}
+
+.close:hover {
+    color: #ff0000; /* Cambia a rojo al pasar el cursor */
+}
+
+/* Estilos para el modal de los pasos  */
+/* Estilo para el modal */
+.modal {
+    display: none; /* Ocultar el modal por defecto */
+    position: fixed;
+    z-index: 1; /* Quedará encima del contenido */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro con transparencia */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ajustar según el tamaño de la pantalla */
+    max-width: 600px; /* Limitar el tamaño máximo */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo para la lista de pasos */
+#stepsList {
+    list-style-type: decimal;
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+/* Efecto para el fondo oscuro */
+.modal-content h3 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+
+/* Estilos para el boton de los pasos */
+.btn-pasos {
+    display: inline-block;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pasos:hover {
+    background-color: #0056b3;
+}
+
+.btn-pasos:active {
+    background-color: #003f7f;
+}
+
+/* Estilos generales para los modales */
+.modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed; /* Fijo en la pantalla */
+    z-index: 1000; /* Asegura que el modal se muestre por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    padding-top: 60px; /* Espaciado superior */
+    overflow: auto; /* Si el contenido es largo, tendrá scroll */
+}
+
+/* Estilo para el contenido de todos los modales */
+.modal-content {
+    background-color: #fff;
+    margin: auto; /* Centra el contenido en la pantalla */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+/* Estilos específicos para el modal de pasos */
+.modal-steps .modal-content {
+    padding: 25px; /* Aumenta el espacio alrededor del contenido */
+    width: 75%; /* Ajusta el tamaño del modal */
+    max-width: 800px; /* Limita el tamaño máximo */
+}
+
+/* Estilo para la lista de pasos */
+.modal-steps .modal-content ul {
+    list-style-type: decimal;
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+/* Estilo para el texto de cada paso */
+.modal-steps .modal-content ul li strong {
+    color: #007bff; /* Color para los números de los pasos */
+    font-weight: bold;
+}
+
+/* Estilo para el título del modal */
+.modal-steps .modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilo para el botón de cerrar (común para todos los modales) */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    float: right;
+    cursor: pointer;
+    transition: color 0.3s; /* Animación suave */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Asegura que el modal se vea bien en dispositivos pequeños */
+@media screen and (max-width: 600px) {
+    .modal-content {
+        width: 90%;
+    }
+}
+
+/* Estilos generales para el modal de pasos */
+.modal-steps {
+    background-color: rgba(255, 192, 203, 0.9); /* Fondo rosa semitransparente */
+}
+
+/* Estilo para el contenido del modal de pasos */
+.modal-steps .modal-content {
+    padding: 25px;
+    background-color: #fff;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Estilos para la tabla de pasos */
+.steps-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.steps-table th, .steps-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.steps-table th {
+    background-color: #f8c8d6; /* Fondo rosa suave para los encabezados */
+    color: #333;
+    font-weight: bold;
+}
+
+.steps-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo alternado para filas */
+}
+
+.steps-table tr:hover {
+    background-color: #f1e0e6; /* Color de fondo al pasar el cursor sobre la fila */
+}
+
+/* Estilos para los botones de editar y eliminar */
+.btn-edit, .btn-delete {
+    padding: 5px 10px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background-color: #007bff;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #ff5733;
+}
+
+.btn-delete:hover {
+    background-color: #c93f21;
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo para el título del modal */
+.modal-steps .modal-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Asegura que el modal se vea bien en dispositivos pequeños */
+@media screen and (max-width: 600px) {
+    .modal-steps .modal-content {
+        width: 90%;
+    }
+    .steps-table td, .steps-table th {
+        font-size: 12px;
+    }
+}

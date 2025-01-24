@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VistaPasosController!{% endblock %}
+{% block title %}Pasos de mi receta{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<h1>Paso index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/RecetarioCocinaSym/src/Controller/VistaPasosController.php'|file_link(0) }}">src/Controller/VistaPasosController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/RecetarioCocinaSym/templates/vista_pasos/index.html.twig'|file_link(0) }}">templates/vista_pasos/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Numero</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paso in pasos %}
+            <tr>
+                <td>{{ paso.id }}</td>
+                <td>{{ paso.nombre }}</td>
+                <td>{{ paso.descripcion }}</td>
+                <td>{{ paso.numero }}</td>
+                <td>
+                    <a href="{{ path('app_paso_show', {'id': paso.id}) }}">show</a>
+                    <a href="{{ path('app_paso_edit', {'id': paso.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

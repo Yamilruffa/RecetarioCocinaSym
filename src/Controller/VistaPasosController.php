@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 //
+use App\Repository\RecetaRepository;
 use App\Entity\Paso;
 use App\Form\PasoType;
 use App\Repository\PasoRepository;
@@ -16,15 +17,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VistaPasosController extends AbstractController
 {
-    #[Route('/vista/pasos', name: 'app_vista_pasos')]
-    public function index(): Response
+    //#[Route('/vista/pasos', name: 'app_vista_pasos')]
+    //public function index(): Response
+    //{
+    //    return $this->render('vista_pasos/index.html.twig', [
+    //        'controller_name' => 'VistaPasosController',
+    //    ]);
+    //}
+
+    #[Route('/vista/pasos', name: 'app_vista_pasos', methods: ['GET'])]
+    public function index(PasoRepository $pasoRepository): Response
     {
         return $this->render('vista_pasos/index.html.twig', [
-            'controller_name' => 'VistaPasosController',
+            'pasos' => $pasoRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_Vista_Paso_new', methods: ['GET', 'POST'])]
+    #[Route('app_vista_pasos_new', name: 'app_vista_pasos_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $paso = new Paso();
@@ -35,12 +44,20 @@ class VistaPasosController extends AbstractController
             $entityManager->persist($paso);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_Vista_pasos_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_vista_pasos', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('Vista_Pasos/new.html.twig', [
+        return $this->renderForm('vista_pasos/new.html.twig', [
             'paso' => $paso,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_paso_show', methods: ['GET'])]
+    public function show(Paso $paso): Response
+    {
+        return $this->render('paso/show.html.twig', [
+            'paso' => $paso,
         ]);
     }
 }

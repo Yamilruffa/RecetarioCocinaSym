@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 //
 use App\Entity\Categoria;
 use App\Entity\Ingrediente;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -23,15 +24,24 @@ class RecetaType extends AbstractType
         $builder
             ->add('nombre')
             ->add('png', FileType::class, [
-                'label' => 'Imagen PNG',
+                'label' => 'Imagen',
                 'mapped' => false,  // No está mapeado directamente a la propiedad 'png' de la entidad
                 'required' => false, // No es obligatorio
-                'attr' => ['accept' => 'image/png'], // Solo permite imágenes PNG
+                'attr' => ['accept' => 'image/*'], // Acepta todo tipo de imágenes
             ])
             ->add('descripcion')
-            ->add('tiempoprep')
+            ->add('tiempoprep', null, [
+                'label' => 'Tiempo de preparación'
+            ])
             ->add('porciones')
-            ->add('dificultad')
+            ->add('dificultad', ChoiceType::class, [
+
+                'choices' => [
+                    'Fácil' => 'Fácil',
+                    'Intermedio' => 'Intermedio',
+                    'Difícil' => 'Difícil',
+                ], // Opciones de selección
+            ])
             // multiple choice para categoria e ingrediente
             ->add('categoria', EntityType::class, [
                 'class' => Categoria::class,

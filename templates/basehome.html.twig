@@ -7,11 +7,10 @@
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/base.css') }}">
         <link rel="stylesheet" href="{{ asset('css/CrearReceta.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/tablas.css') }}">
+
         {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
     </head>
     <body>
         <nav>
@@ -70,5 +69,11 @@
         </script>
 
         {% block body %}{% endblock %}
+
+        {% block javascripts %}
+
+        <script src="{{ asset('js/modales.js') }}"></script>
+
+        {% endblock %}
     </body>
 </html>

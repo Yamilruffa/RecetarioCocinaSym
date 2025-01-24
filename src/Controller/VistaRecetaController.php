@@ -9,18 +9,41 @@ use App\Entity\Receta;
 use App\Form\RecetaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use App\Repository\RecetaRepository;
+use App\Repository\PasoRepository;
+
 
 class VistaRecetaController extends AbstractController
 {
-    #[Route('/vista/receta', name: 'app_vista_receta')]
-    public function index(): Response
+
+    #[Route('/vista/receta', name: 'app_vista_receta', methods: ['GET'])]
+    public function index(RecetaRepository $recetaRepository): Response
     {
+        // Obtener el usuario logueado
+        $usuario = $this->getUser();
+    
+        if (!$usuario) {
+            throw $this->createAccessDeniedException('Debes estar autenticado para ver las recetas.');
+        }
+    
+        // Obtener solo las recetas del usuario logueado y cargar los pasos asociados
+        $recetas = $recetaRepository->createQueryBuilder('r')
+            ->leftJoin('r.pasos', 'p') // Asume que "pasos" es la relación en la entidad Receta
+            ->addSelect('p')
+            ->where('r.usuario = :usuario')
+            ->setParameter('usuario', $usuario)
+            ->getQuery()
+            ->getResult();
+    
         return $this->render('vista_receta/index.html.twig', [
-            'controller_name' => 'VistaRecetaController',
+            'recetas' => $recetas,
         ]);
     }
+    
 
-    #[Route('/new', name: 'app_vista_receta_new', methods: ['GET', 'POST'])]
+    #[Route('/vista/receta/new', name: 'app_vista_receta_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Crear una nueva instancia de la entidad Receta
@@ -57,11 +80,8 @@ class VistaRecetaController extends AbstractController
             $entityManager->persist($recetum);
             $entityManager->flush();
 
-            // Agregar un mensaje de éxito
-            $this->addFlash('success', '¡Receta creada con éxito!');
-
             // Redirigir a la creacion de pasos
-            return $this->redirectToRoute('app_Vista_Paso_new');
+            return $this->redirectToRoute('app_vista_pasos_new');
         }
 
         // Renderizar el formulario
@@ -70,4 +90,7 @@ class VistaRecetaController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    
+
 }
