@@ -1,0 +1,125 @@
+/* Centrado de todo el contenido */
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Estilo para la imagen de la receta con id */
+#receta-imagen {
+    margin-bottom: 20px;
+    text-align: center; /* Centrar la imagen */
+}
+
+#receta-imagen img {
+    max-width: 100%; /* Hace que la imagen ocupe todo el ancho disponible sin desbordarse */
+    height: auto;    /* Mantiene la proporción de la imagen */
+    display: flex;  /* Asegura que la imagen sea un bloque y no se quede alineada con el texto */
+    margin: 0 auto;  /* Centra la imagen */
+}
+
+/* Estilo para la tabla */
+.tabla-detalles {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;  /* Aumenté el padding para hacer la tabla más grande */
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+td {
+    background-color: #ffffff;
+}
+
+/* Estilo para la lista de pasos */
+ul.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+ul.list-unstyled li {
+    padding: 5px 0;
+}
+
+/* Botón "Volver" más pequeño */
+.btn-back {
+    display: inline-block;
+    padding: 5px 10px;  /* Mantener el padding pequeño */
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;  /* Mantener tamaño de fuente pequeño */
+    margin-top: 20px;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
+
+/* Estilo para el recuadro */
+#recuadro {
+    border: 2px solid #e55039; /* Borde azul */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo claro */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    margin-top: 30px; /* Separar el recuadro del inicio */
+    margin-bottom: 30px; /* Separar el recuadro del final */
+}
+
+#recuadro h1 {
+    color: #e55039; /* Color del título */
+}
+
+/* Estilo para la tabla */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+/* Estilo para el botón Volver */
+.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e55039;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.btn-back:hover {
+    background-color: #c0392b;
+}

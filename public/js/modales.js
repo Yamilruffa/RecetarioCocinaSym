@@ -75,3 +75,83 @@ window.onclick = function (event) {
         }
     });
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(track.children);
+    const prevButton = document.querySelector('.carousel-button-left');
+    const nextButton = document.querySelector('.carousel-button-right');
+    const indicators = document.querySelectorAll('.indicator');
+
+    let currentIndex = 0;
+
+    function updateSlidePosition() {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length; // Ciclo continuo
+        updateSlidePosition();
+    });
+
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length; // Ciclo continuo
+        updateSlidePosition();
+    });
+
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateSlidePosition();
+        });
+    });
+
+    // Función para mover automáticamente las diapositivas
+    function autoMoveSlide() {
+        currentIndex = (currentIndex + 1) % slides.length; // Ciclo continuo
+        updateSlidePosition();
+    }
+
+    // Configurar el intervalo para que el carrusel se mueva automáticamente cada 3 segundos
+    const intervalTime = 3000; // Tiempo en milisegundos (3 segundos)
+    setInterval(autoMoveSlide, intervalTime); // Llamada a autoMoveSlide cada 3 segundos
+});
+
+// eliminar recetas
+// Mostrar el modal correspondiente cuando se hace clic en "Eliminar"
+document.querySelectorAll('.btn-delete').forEach(function(btn) {
+    btn.onclick = function(event) {
+        event.preventDefault(); // Evita que el enlace haga su acción por defecto
+        var recetumId = btn.getAttribute('data-id'); // Obtén el ID de la receta
+        var modal = document.getElementById('deleteModal-' + recetumId); // Encuentra el modal correspondiente
+        modal.style.display = "block";
+    };
+});
+
+// Cerrar el modal cuando se hace clic en el botón de cerrar (×)
+document.querySelectorAll('.close').forEach(function(span) {
+    span.onclick = function() {
+        var modal = span.closest('.modal'); // Encuentra el modal padre
+        modal.style.display = "none";
+    };
+});
+
+// Cerrar el modal cuando se hace clic en el botón "Cancelar"
+document.querySelectorAll('.cancelBtn').forEach(function(cancelBtn) {
+    cancelBtn.onclick = function() {
+        var modal = cancelBtn.closest('.modal'); // Encuentra el modal padre
+        modal.style.display = "none";
+    };
+});
+
+// Cerrar el modal cuando se hace clic fuera de él
+window.onclick = function(event) {
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+};

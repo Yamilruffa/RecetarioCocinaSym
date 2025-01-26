@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('css/base.css') }}">
         <link rel="stylesheet" href="{{ asset('css/CrearReceta.css') }}">
         <link rel="stylesheet" href="{{ asset('css/tablas.css') }}">
-
+        <link rel="stylesheet" href="{{ asset('css/showrecetas.css') }}">
         {% endblock %}
 
     </head>
@@ -16,7 +16,13 @@
         <nav>
             <!-- Barra lateral (Sidebar) -->
             <ul class="sidebar">
-                <li onclick=hideSidebar()><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+                <li onclick="hideSidebar()">
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#e8eaed">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </a>
+                </li>
                 <li><a href="#">Recetas Saladas</a></li>
                 <li><a href="#">Recetas Dulces</a></li>
                 <li><a href="#">Categorías</a></li>
@@ -52,28 +58,34 @@
                     <li class="hideOnMobile"><a href="{{ path('app_registrospa') }}">Registrarse</a></li>
                     <li class="hideOnMobile"><a href="{{ path('app_login') }}">Iniciar Sesión</a></li>
                 {% endif %}
-                <li class="menu-button" onclick=showSidebar()><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#e8eaed"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+                <li class="menu-button" onclick="showSidebar()">
+                    <a href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#e8eaed">
+                            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
+                        </svg>
+                    </a>
+                </li>
             </ul>
         </nav>
 
         <script>
+            // Función para mostrar la barra lateral
             function showSidebar(){
-                const sidebar = document.querySelector('.sidebar')
-                sidebar.style.display = 'flex'
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'flex';
             }
 
+            // Función para ocultar la barra lateral
             function hideSidebar(){
-                const sidebar = document.querySelector('.sidebar')
-                sidebar.style.display = 'none'
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'none';
             }
         </script>
 
         {% block body %}{% endblock %}
 
         {% block javascripts %}
-
         <script src="{{ asset('js/modales.js') }}"></script>
-
         {% endblock %}
     </body>
 </html>

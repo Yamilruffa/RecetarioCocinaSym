@@ -1,0 +1,49 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %}Editar Receta{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <h1>Editar Receta</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.nombre, {'attr': {'class': 'formulario-input'}}) }}
+        {{ form_row(form.png, {'attr': {'class': 'formulario-input'}}) }}
+        {{ form_row(form.descripcion, {'attr': {'class': 'formulario-input'}}) }}
+        {{ form_row(form.tiempoprep, {'attr': {'class': 'formulario-input'}}) }}
+        {{ form_row(form.porciones, {'attr': {'class': 'formulario-input'}}) }}
+        {{ form_row(form.dificultad, {'attr': {'class': 'formulario-input'}}) }}
+
+        <div class="form-group">
+            {{ form_label(form.categoria) }}
+            <div class="form-check-group">
+                {{ form_widget(form.categoria, {'attr': {'class': 'formulario-input'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.ingredientes) }}
+            <div class="form-check-group">
+                {{ form_widget(form.ingredientes, {'attr': {'class': 'formulario-input'}}) }}
+            </div>
+        </div>
+
+        {{ form_row(form.usuario, {'attr': {'class': 'formulario-input'}}) }}
+
+        <button type="submit" class="btn">{{ button_label|default('Actualizar') }}</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_vista_receta') }}" class="btn-back">Volver</a>
+</div>
+
+<div class="instrucciones">
+    <h2>Instrucciones:</h2>
+    <ol>
+        <li>  Primero edite los campos necesarios para la receta.</li>
+        <li>  Si desea cambiar la imagen, suba una nueva.</li>
+        <li>  Modifique la descripción si es necesario.</li>
+        <li>  Ajuste los demás campos según sea necesario.</li>
+        <li>  A continuación, haga clic en "Actualizar" para guardar los cambios.</li>
+    </ol>
+</div>
+{% endblock %}

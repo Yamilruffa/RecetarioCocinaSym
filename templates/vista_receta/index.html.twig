@@ -8,7 +8,7 @@
 <table class="receta-table">
     <thead>
         <tr>
-            <th>Id</th>
+
             <th>Nombre</th>
             <th>Imagen</th>
             <th>Descripción</th>
@@ -22,12 +22,11 @@
     <tbody>
         {% for recetum in recetas %}
             <tr>
-                <td>{{ recetum.id }}</td>
                 <td>{{ recetum.nombre }}</td>
                 <td>
                     {% if recetum.png %}
-                        <a href="#" class="image-link" data-image="{{ asset(recetum.png) }}">
-                            {{ recetum.png|split('/')|last }}
+                        <a href="#" class="image-link" data-image="{{ asset(recetum.png) }}" onclick="openImageModal('{{ asset(recetum.png) }}')">
+                            <img src="{{asset(recetum.png|slice(1)) }}" style="width: 50px; height: auto;">
                         </a>
                     {% else %}
                         <span>No disponible</span>
@@ -42,8 +41,11 @@
                     <button class="btn-pasos" onclick="openModal('modal-{{ recetum.id }}')">Ver pasos</button>
                 </td>
                 <td>
-                    <a href="{{ path('app_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
-                    <a href="{{ path('app_receta_edit', {'id': recetum.id}) }}" class="btn-edit">Editar</a>
+                    <a href="{{ path('app_vista_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
+                    <a href="{{ path('app_vista_receta_edit', {'id': recetum.id}) }}" class="btn-edit">Editar</a>
+                
+                    <!-- Botón para activar el modal de confirmación de eliminación -->
+                    <a href="#" class="btn-delete" data-id="{{ recetum.id }}">Eliminar</a>
                 </td>
             </tr>
         {% else %}
@@ -56,41 +58,64 @@
 
 <!-- Contenedor para los modales -->
 <div id="modals-container">
+
     {% for recetum in recetas %}
-        <!-- Modal para los pasos -->
-        <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
-                <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
-                <table class="steps-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Paso</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for paso in recetum.pasos %}
-                            <tr>
-                                <td>{{ paso.numero }}</td>
-                                <td>{{ paso.nombre }}</td>
-                                <td>{{ paso.descripcion }}</td>
-                                <td>
-                                    <a href="#" class="btn-edit">Editar</a>
-                                    <a href="#" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este paso?')">Eliminar</a>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4">No hay pasos disponibles para esta receta.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+
+    <!-- Modal para mostrar imagen -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeImageModal()">&times;</span>
+            <img id="modalImage" src="" alt="Imagen de la receta" style="max-width: 100%; height: auto;">
         </div>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div id="deleteModal-{{ recetum.id }}" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>¿Estás seguro de que deseas eliminar esta receta?</h3>
+            <form action="{{ path('app_vista_receta_delete', {'id': recetum.id}) }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para los pasos -->
+    <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
+            <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
+            <table class="steps-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Paso</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paso in recetum.pasos %}
+                        <tr>
+                            <td>{{ paso.numero }}</td>
+                            <td>{{ paso.nombre }}</td>
+                            <td>{{ paso.descripcion }}</td>
+                            <td>
+                                <a href="#" class="btn-edit">Editar</a>
+                                <a href="#" class="btn-delete" onclick="return confirm('¿Estás seguro de eliminar este paso?')">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No hay pasos disponibles para esta receta.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endfor %}
 </div>
 

@@ -1,8 +1,9 @@
 /* Estilos para la tabla de recetas */
 .receta-table {
-    width: 90%; /* Ancho relativo para adaptarse a la pantalla */
+    width: 100%; /* Hace que la tabla ocupe el 100% del contenedor */
+    max-width: 90%; /* Evita que la tabla se salga del contenedor */
     margin: 2em auto; /* Centra horizontalmente y agrega margen vertical */
-    border: 5px solid #dd00ff; /* Contorno de color naranja intenso */
+    border: 5px solid #0000; /* Contorno de color naranja intenso */
     border-radius: 10px; /* Bordes redondeados */
     overflow: hidden; /* Asegura que los bordes redondeados sean visibles */
     background-color: #fff; /* Fondo blanco para contraste */
@@ -11,9 +12,10 @@
 
 .receta-table th,
 .receta-table td {
-    padding: 15px; /* Espaciado interno */
+    padding: 1.5em 2em; /* Aumenta el padding horizontal (izquierda y derecha) */
     text-align: left;
-    border: 1px solid #ddd; /* Líneas internas de las celdas */
+    border: 0.1em solid #ddd; /* Bordes marcados para cada celda */
+    min-width: 150px; /* Establece un ancho mínimo para cada celda */
 }
 
 .receta-table th {
@@ -28,29 +30,6 @@
 
 .receta-table tr:hover {
     background-color: #ffe4c4; /* Resalta fila al pasar el cursor */
-}
-
-
-
-.receta-table th,
-.receta-table td {
-    padding: 1em; /* Espaciado interno proporcional */
-    text-align: left;
-    border: 0.1em solid #ddd; /* Bordes marcados para cada celda */
-}
-
-.receta-table th {
-    background-color: #eaf7df; /* Fondo en tono pastel para encabezados */
-    font-weight: bold;
-    color: #333; /* Texto en color oscuro para contraste */
-}
-
-.receta-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Alterna el color de las filas */
-}
-
-.receta-table tr:hover {
-    background-color: #e4f0d8; /* Resalta fila al pasar el cursor */
 }
 
 .receta-img {
@@ -95,6 +74,44 @@
     font-style: italic;
     color: #888;
     padding: 1em; /* Espaciado en la celda sin registros */
+}
+
+/* Hacer que la tabla sea responsive */
+@media screen and (max-width: 768px) {
+    .receta-table {
+        width: 100%;
+        overflow-x: auto; /* Habilita el deslizamiento horizontal cuando la pantalla es pequeña */
+        display: block; /* Convierte la tabla en un bloque */
+    }
+    
+    .receta-table th,
+    .receta-table td {
+        padding: 1em; /* Reducción de padding en pantallas pequeñas */
+    }
+    
+    .receta-table tr {
+        display: block;
+        margin-bottom: 1em; /* Espacio entre las filas cuando son bloques */
+    }
+    
+    .receta-table th {
+        display: none; /* Oculta los encabezados en pantallas pequeñas */
+    }
+    
+    .receta-table td {
+        display: block;
+        text-align: right; /* Alinea el texto a la derecha en pantallas pequeñas */
+        position: relative;
+        padding-left: 50%; /* Agrega espacio para el contenido */
+    }
+    
+    .receta-table td:before {
+        content: attr(data-label); /* Muestra el nombre de la columna antes de cada celda */
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        font-weight: bold;
+    }
 }
 
 /* Estilos para el modal de las imagenes */
@@ -405,6 +422,44 @@
     margin-bottom: 20px;
     text-align: center;
 }
+
+/* Estilo para el modal de confirmacion */
+
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro */
+}
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    text-align: center;
+    }
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    }
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 
 /* Asegura que el modal se vea bien en dispositivos pequeños */
 @media screen and (max-width: 600px) {

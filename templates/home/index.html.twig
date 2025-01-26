@@ -11,5 +11,34 @@
         <a href="/recetas" class="btn">Explorar Recetas</a>
     </section>
 </main>
-{% endblock %}
 
+{% if recetas is empty %}
+    <p>No hay recetas disponibles en este momento. ¡Vuelve pronto!</p>
+{% else %}
+<div class="carousel">
+    <div class="carousel-track-container">
+        <ul class="carousel-track">
+            {% for receta in recetas %}
+            <li class="carousel-slide {% if loop.first %}current-slide{% endif %}">
+                <a href="{{ path('vista_receta_show', {'id': receta.id}) }}">
+                    <img src="{{ asset(receta.png|slice(1)) }}" alt="{{ receta.nombre }}" class="carousel-image" loading="lazy">
+
+                </a>
+                <h3 class="carousel-title">{{ receta.nombre }}</h3>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    
+    
+    <button class="carousel-button carousel-button-left" aria-label="Anterior" tabindex="0">❮</button>
+    <button class="carousel-button carousel-button-right" aria-label="Siguiente" tabindex="0">❯</button>
+    <div class="carousel-indicators">
+        {% for receta in recetas %}
+        <button class="indicator {% if loop.first %}active{% endif %}" data-slide="{{ loop.index0 }}"></button>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

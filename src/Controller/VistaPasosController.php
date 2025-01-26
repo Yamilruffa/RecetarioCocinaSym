@@ -53,11 +53,29 @@ class VistaPasosController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_paso_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_vista_paso_show', methods: ['GET'])]
     public function show(Paso $paso): Response
     {
         return $this->render('paso/show.html.twig', [
             'paso' => $paso,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_vista_paso_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Paso $paso, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(PasoType::class, $paso);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_paso_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('paso/edit.html.twig', [
+            'paso' => $paso,
+            'form' => $form,
         ]);
     }
 }
