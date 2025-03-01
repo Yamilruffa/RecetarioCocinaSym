@@ -225,6 +225,7 @@ body {
 .carousel {
     position: relative;
     overflow: hidden;
+    max-width: 800px; /* Ajusta el ancho del carrusel según necesites */
     width: 100%;
     max-width: 800px;
     margin: 30px auto;
@@ -234,6 +235,29 @@ body {
     position: relative;
     overflow: hidden;
     width: 100%;
+}
+
+.contenedor-flex {
+    display: flex;
+    align-items: center; /* Alinea verticalmente */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    gap: 200px; /* Espacio entre carrusel y texto */
+    width: 100%;
+    max-width: 1200px; /* Ajusta según necesites */
+    margin: auto; /* Centra el contenedor */
+}
+
+.carousel-container {
+    flex: 2; /* Ocupa más espacio */
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.textouno {
+    flex: 1; /* Ocupa menos espacio */
+    text-align: left;
+    max-width: 600px; /* Limita el ancho del texto */
 }
 
 .carousel-track {
@@ -252,12 +276,13 @@ body {
     width: 100%;
     height: 500px;
     object-fit: contain;  /* Cambiar de 'cover' a 'contain' para probar */
-    border-radius: 10px;
+    border-radius: 15px;
 }
 
 .carousel-slide, .carousel-image {
     border: none;
     box-shadow: none;
+
 }
 
 .carousel-slide::marker {
@@ -323,6 +348,101 @@ body {
 .indicator.active {
     background-color: #555;
 }
+
+
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.footer p {
+    font-size: 1.5rem; /* Tamaño más grande para que parezca título */
+    font-weight: bold; /* Hace que el texto sea más grueso */
+    margin-bottom: 15px;
+}
+
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 500px; /* Aumenta la separación entre columnas */
+    row-gap: 10px; /* Espaciado vertical entre los enlaces */
+    max-width: 1000px; /* Aumenta el ancho para dar más espacio */
+    margin: 0 auto;
+    text-align: left;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem; /* Aumenta el tamaño de los enlaces */
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+
+.receta-random-img {
+    width: 500px;  /* Ajusta el tamaño según necesites */
+    height: auto;  /* Mantiene la proporción */
+    display: block;
+    margin: 10px auto; /* Centra la imagen */
+    border-radius: 10px; /* Opcional, bordes redondeados */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+.sobre-nosotros {
+    font-size: 1.2rem;
+    background-image: url('../img/sobrenosotros.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.sobre-nosotros h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.sobre-nosotros p {
+    font-size: 1.5rem;
+    max-width: 80%;
+    line-height: 1.6;
+}
+
+
+.sobre-nosotros-contenido {
+    background: rgba(0, 0, 0, 0.6); /* Fondo negro semi-transparente */
+    padding: 20px;
+    border-radius: 15px; /* Bordes redondeados */
+    display: inline-block;
+    max-width: 90%;
+}
+
+
 
 
 
