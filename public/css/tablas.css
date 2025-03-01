@@ -212,6 +212,11 @@
     cursor: pointer;
 }
 
+.modal.modal-steps .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
 /* Estilo para la lista de pasos */
 #stepsList {
     list-style-type: decimal;
@@ -301,6 +306,11 @@
     font-size: 1.8em;
     margin-bottom: 20px;
     text-align: center;
+}
+
+.modal-steps .modal-content {
+    margin: 10vh auto;
+    max-height: 80vh;
 }
 
 /* Estilo para el botón de cerrar (común para todos los modales) */

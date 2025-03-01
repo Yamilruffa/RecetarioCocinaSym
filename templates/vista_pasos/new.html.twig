@@ -1,11 +1,92 @@
-{% extends 'base.html.twig' %}
+{% extends 'basehome.html.twig' %}
 
-{% block title %}New Paso{% endblock %}
+{% block title %}Agregar Pasos{% endblock %}
 
 {% block body %}
-    <h1>Agregue pasos a su receta</h1>
+<div class="layout">
+    <div class="contenedor-instrucciones">
+        <div class="instrucciones" id="instrucciones">
+            <button id="toggle-instrucciones">−</button>
+            <h2>Instrucciones:</h2>
+            <ol>
+                <li>Primero coloque el nombre de la receta.</li>
+                <li>Luego, si lo desea y recomendamos, suba una imagen para su receta.</li>
+                <li>Coloque una breve descripción de su receta.</li>
+                <li>Complete los demás campos.</li>
+                <li>A continuación, cliquee siguiente.</li>
+            </ol>
+        </div>
+    </div>
 
-    {{ include('paso/_form.html.twig') }}
+    <div class="main-content">
+        <div id="contenedor-pasos">
+            <h1>Agregar Pasos a la Receta</h1>
+            <form id="paso-form" method="POST" action="{{ path('app_vista_pasos_new', {'id': receta.id}) }}">
+                {{ form_start(form) }}
+                {{ form_row(form.nombre, {'attr': {'class': 'formulario-input'}}) }}
+                {{ form_row(form.descripcion, {'attr': {'class': 'formulario-input'}}) }}
+                {{ form_row(form.numero, {'attr': {'class': 'formulario-input'}}) }}
+                {{ form_row(form.receta, {'attr': {'class': 'formulario-input'}}) }}
+                <button type="submit" name="action" value="add" class="btn">Agregar otro paso</button>
+                <button type="submit" name="action" value="finalizar" class="btn-back">Finalizar</button>
+                {{ form_end(form) }}
+            </form>
+        </div>
 
-    <a href="{{ path('app_paso_index') }}">back to list</a>
+        <div id="table-container">
+            <h2>Pasos agregados:</h2>
+            <table class="pasos-table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paso in pasos %}
+                        <tr id="row-{{ paso.id }}">
+                            <td>{{ paso.numero }}</td>
+                            <td>{{ paso.nombre }}</td>
+                            <td>{{ paso.descripcion }}</td>
+                            <td>
+                                <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
+                                <button
+                                    type="button"
+                                    class="btn-eliminar"
+                                    data-id="{{ paso.id }}"
+                                    data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}"
+                                    data-token="{{ csrf_token('delete' ~ paso.id) }}">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de eliminación -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
+        <button type="button" class="btn btn-danger confirmDelete">Eliminar</button>
+        <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="confirmacionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Paso eliminado con éxito</h3>
+        <button type="button" id="confirmacionCerrar" class="btn btn-primary">Aceptar</button>
+    </div>
+</div>
+
+
+
 {% endblock %}

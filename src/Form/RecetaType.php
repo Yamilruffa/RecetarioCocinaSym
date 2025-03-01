@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 //
 use App\Entity\Categoria;
 use App\Entity\Ingrediente;
@@ -15,7 +14,6 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-
 
 class RecetaType extends AbstractType
 {
@@ -35,7 +33,6 @@ class RecetaType extends AbstractType
             ])
             ->add('porciones')
             ->add('dificultad', ChoiceType::class, [
-
                 'choices' => [
                     'Fácil' => 'Fácil',
                     'Intermedio' => 'Intermedio',
@@ -58,16 +55,31 @@ class RecetaType extends AbstractType
             //escondo el usuario
             ->add('usuario', HiddenType::class,[
                 'label'=> false, // esto hace que no se muestre en el formulario, para que el usuario no lo pueda modificar.
-                'mapped'=> false // esto hace que el formulario no sobreescriva el valor de usuario que le pasamos de la pagina anterior.
-            ])
+                'mapped'=> false // esto hace que el formulario no sobreescriba el valor de usuario que le pasamos de la página anterior.
+            ]);
 
-        ;
+        // Mostrar el campo 'visible' solo si el usuario es admin
+        if (isset($options['user']) && in_array('ROLE_ADMIN', $options['user']->getRoles())) {
+            $builder->add('visible', ChoiceType::class, [
+                'choices' => [
+                    'Sí' => '1',
+                    'No' => '0',
+                ],
+                'data' => '0', // Valor por defecto
+            ]);
+        } else {
+            $builder->add('visible', HiddenType::class, [
+                'mapped' => false,
+                'data' => '0', // Valor por defecto 'No'
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Receta::class,
+            'user' => null, // Se agrega esta opción para recibir el usuario
         ]);
     }
 }

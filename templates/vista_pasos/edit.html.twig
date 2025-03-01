@@ -1,13 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'basehome.html.twig' %}
 
-{% block title %}Edit Paso{% endblock %}
+{% block title %}Editar Paso{% endblock %}
 
 {% block body %}
-    <h1>Edit Paso</h1>
+<div class="form-container">
+    <h1>{% if paso.id %}Editar Paso{% else %}Agregar Paso{% endif %}</h1>
 
-    {{ include('paso/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ form_start(form) }}
+    {{ form_row(form.nombre, {'attr': {'class': 'formulario-input'}}) }}
+    {{ form_row(form.descripcion, {'attr': {'class': 'formulario-input'}}) }}
+    {{ form_row(form.numero, {'attr': {'class': 'formulario-input'}}) }}
+    {{ form_row(form.receta, {'attr': {'class': 'formulario-input'}}) }}
 
-    <a href="{{ path('app_paso_index') }}">back to list</a>
 
-    {{ include('paso/_delete_form.html.twig') }}
+            <button type="submit" class="btn">
+                {% if paso.id %}Actualizar{% else %}Agregar{% endif %}
+            </button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_vista_receta') }}" class="btn-back">Volver a la lista</a>
+</div>
+
 {% endblock %}

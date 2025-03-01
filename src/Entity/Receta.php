@@ -49,6 +49,9 @@ class Receta
     #[ORM\OneToMany(targetEntity: Calificacion::class, mappedBy: 'receta')]
     private Collection $calificacions;
 
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $visible = null;
+
     public function __construct()
     {
         $this->categoria = new ArrayCollection();
@@ -257,5 +260,17 @@ class Receta
     public function __toString(): string
     {
         return (string) $this->id ?? 'Sin id';
+    }
+
+    public function getVisible(): ?string
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(?string $visible): static
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

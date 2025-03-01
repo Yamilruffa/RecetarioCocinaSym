@@ -1,0 +1,109 @@
+/* Reset general */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F2D4D4;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Contenedor general para instrucciones y contenido principal */
+.layout {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 20px;
+}
+
+.instrucciones.minimizado {
+    width: auto; /* Se ajusta al contenido (botón + título) */
+    height: auto; /* Se ajusta al contenido */
+    overflow: hidden;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row; /* Para que el título y el botón estén en línea */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50px; /* Mantiene la posición original */
+    left: 20px; /* Mantiene la posición original */
+    transform: none; /* Elimina el movimiento al centro */
+}
+
+/* Ocultar la lista de instrucciones cuando está minimizado */
+.instrucciones.minimizado ol {
+    display: none;
+}
+
+/* Asegurar que el título siempre se vea */
+.instrucciones.minimizado h2 {
+    display: block;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Mantener el botón visible y accesible */
+.instrucciones.minimizado #toggle-instrucciones {
+    position: relative;
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+
+
+/* Contenedor principal para formulario y lista de pasos */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 75%;
+}
+
+/* Formulario centrado */
+#contenedor-pasos {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 40%;
+    text-align: center;
+}
+
+/* Lista de pasos alineada al lado del formulario */
+#table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 50%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Tabla con disposición en columna */
+.pasos-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pasos-table th,
+.pasos-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.pasos-table th {
+    background-color: #f4f4f4;
+}
+

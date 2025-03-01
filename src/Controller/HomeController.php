@@ -15,7 +15,12 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function index(RecetaRepository $recetaRepository): Response
     {
-        $recetas = $recetaRepository->findAll(); // Obtén todas las recetas
+        $recetas = $recetaRepository->createQueryBuilder('r')
+            ->where('r.visible = :visible')
+            ->setParameter('visible', 'si')
+            ->getQuery()
+            ->getResult();
+        
         return $this->render('home/index.html.twig', [
             'recetas' => $recetas,
         ]);
@@ -25,11 +30,12 @@ class HomeController extends AbstractController
     #[Route('/receta/{id}', name: 'vista_receta_show')]
     public function show(Receta $receta): Response
     {
+        if ($receta->getVisible() !== 'si') {
+            throw $this->createNotFoundException('La receta no está disponible.');
+        }
+        
         return $this->render('vista_receta/show.html.twig', [
             'recetum' => $receta,
         ]);
     }
-
-
-
 }

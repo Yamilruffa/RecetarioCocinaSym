@@ -125,6 +125,7 @@ fieldset {
     animation: floatIn 1s ease-out;
 }
 
+
 /* Keyframes de la animación */
 @keyframes floatIn {
     0% {
