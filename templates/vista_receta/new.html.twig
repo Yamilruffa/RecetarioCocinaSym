@@ -16,15 +16,32 @@
 
         <div class="form-group">
             {{ form_label(form.categoria) }}
-            <div class="form-check-group">
-                {{ form_widget(form.categoria, {'attr': {'class': 'formulario-input'}}) }}
+            <div class="categoria-container">
+                <div class="categoria-grid">
+                    {% for choice in form.categoria %}
+                        <div class="categoria-item">
+                            {{ form_widget(choice) }}
+                            {{ form_label(choice) }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
+        
+        
+        
 
         <div class="form-group">
             {{ form_label(form.ingredientes) }}
-            <div class="form-check-group">
-                {{ form_widget(form.ingredientes, {'attr': {'class': 'formulario-input'}}) }}
+            <div class="categoria-container">
+                <div class="categoria-grid">
+                    {% for choice in form.ingredientes %}
+                        <div class="categoria-item">
+                            {{ form_widget(choice) }}
+                            {{ form_label(choice) }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 

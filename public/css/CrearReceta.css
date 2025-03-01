@@ -1,18 +1,17 @@
 /* Contenedor del formulario y título */
 .form-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative; /* Antes estaba absolute */
+    margin: 100px auto; /* Ajusta según la altura de la navbar */
     text-align: center;
-    max-width: 50em; /* Aproximadamente 800px */
+    max-width: 50em;
     background-color: #ffffff;
     padding: 2em;
     border: 0.1em solid #ced4da;
     border-radius: 0.625em;
     box-shadow: 0 0.375em 0.625em rgba(0, 0, 0, 0.15);
-    display: block
+    display: block;
 }
+
 
 /* Estilo del título */
 .form-container h1 {
@@ -31,6 +30,13 @@
     border-radius: 0.3125em;
     background-color: #f9f9f9;
     font-size: 0.875em;
+    font-weight: normal;
+}
+
+/* Estilo general para todas las etiquetas de los formularios */
+.form-group label,
+.form-container label {
+    font-weight: bold;
 }
 
 /* Botón estilizado */
@@ -57,7 +63,7 @@
 .btn-back {
     margin-top: 1em;
     text-align: center;
-    background-color: #e55039; 
+    background-color: #e55039;
     color: #ffffff;
     text-decoration: none;
     padding: 0.5em; /* Reducido */
@@ -85,7 +91,7 @@ fieldset {
     padding: 0;
 }
 
-/* Estilos generales para el contenedo de instrucciones */
+/* Estilos generales para el contenedor de instrucciones */
 .instrucciones {
     background-color: #fff;
     border-radius: 8px;
@@ -125,7 +131,6 @@ fieldset {
     animation: floatIn 1s ease-out;
 }
 
-
 /* Keyframes de la animación */
 @keyframes floatIn {
     0% {
@@ -136,6 +141,42 @@ fieldset {
         transform: translateX(0) translateY(-50%);
         opacity: 1;
     }
+}
+
+/* Contenedor con bordes para las opciones de categoría */
+.categoria-container {
+    background-color: #f9f9f9;
+    padding: 1.5em;
+    border: 0.1em solid #ced4da;
+    border-radius: 0.3125em;
+    box-shadow: 0 0.375em 0.625em rgba(0, 0, 0, 0.1);
+    margin-bottom: 1em;
+}
+
+/* Mantiene la cuadrícula de 6 columnas */
+.categoria-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+/* Alineación de cada checkbox con su etiqueta */
+.categoria-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Espaciado para la etiqueta de "Categoría" */
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    display: block;
+}
+
+/* Evita que los valores dentro de los inputs y las opciones de categoría estén en negrita */
+.categoria-item label {
+    font-weight: normal;
 }
 
 /* Agregar un borde superior con color */

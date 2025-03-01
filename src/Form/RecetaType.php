@@ -14,6 +14,9 @@ use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Doctrine\ORM\EntityRepository;
+
+
 
 class RecetaType extends AbstractType
 {
@@ -44,7 +47,11 @@ class RecetaType extends AbstractType
                 'class' => Categoria::class,
                 'multiple' => true, // Permite seleccionar más de una categoría
                 'expanded' => true, // Mostrar como casillas de verificación (checkbox)
-                'choice_label' => 'nombre'
+                'choice_label' => 'nombre',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.nombre', 'ASC'); // Ordena las categorías por nombre ascendente
+                },
             ])
             ->add('ingredientes', EntityType::class, [
                 'class' => Ingrediente::class,

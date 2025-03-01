@@ -123,3 +123,32 @@ th, td {
 .btn-back:hover {
     background-color: #c0392b;
 }
+
+
+ol.list-unstyled {
+    padding-left: 20px;
+    list-style-type: decimal; /* Asegura que se muestren números */
+}
+
+
+.pasos-receta {
+    padding-left: 20px;
+    text-align: left; /* Alinea el texto a la izquierda para facilitar la lectura */
+    font-size: 18px; /* Tamaño de fuente más grande */
+    line-height: 1.6; /* Espaciado entre líneas */
+    max-width: 800px; /* Limita el ancho para evitar textos demasiado largos */
+    margin: 0 auto; /* Centra la lista */
+}
+
+.pasos-receta li {
+    margin-bottom: 15px; /* Espaciado entre pasos */
+    list-style-type: decimal; /* Asegura que los pasos estén numerados */
+}
+
+.pasos-receta p {
+    margin: 0;
+    padding: 10px;
+    background-color: #f8f9fa; /* Fondo claro para cada paso */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar cada paso */
+}

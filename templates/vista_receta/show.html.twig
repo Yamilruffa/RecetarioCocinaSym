@@ -1,6 +1,6 @@
 {% extends 'basehome.html.twig' %}
 
-{% block title %}Receta aaaa{% endblock %}
+{% block title %}Receta{% endblock %}
 
 {% block body %}
 <div class="container text-center">
@@ -46,11 +46,11 @@
                         <th>Pasos:</th>
                         <td>
                             {% if recetum.pasos is not empty %}
-                                <ul class="list-unstyled">
+                                <ol class="pasos-receta">
                                     {% for paso in recetum.pasos %}
-                                        <li>{{ paso.descripcion }}</li>
+                                        <li><p>{{ paso.descripcion }}</p></li>
                                     {% endfor %}
-                                </ul>
+                                </ol>
                             {% else %}
                                 <p>No hay pasos disponibles</p>
                             {% endif %}
