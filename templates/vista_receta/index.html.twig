@@ -103,7 +103,7 @@
                                 <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-show">Agregar Paso</a>
                                 <button
                                     type="button"
-                                    class="btn-eliminar"
+                                    class="btn-delete"
                                     data-id="{{ paso.id }}"
                                     data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}"
                                     data-token="{{ csrf_token('delete' ~ paso.id) }}">

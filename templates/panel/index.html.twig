@@ -1,0 +1,145 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block body %}
+<h1>Panel de Administración</h1>
+
+<!-- Lista de usuarios y sus recetas -->
+{% for user in users %}
+    {% if 'ROLE_ADMIN' not in user.roles %}
+        <h2>Usuario: {{ user.email }}</h2>
+
+        <!-- Botón para eliminar usuario -->
+        <form action="{{ path('admin_delete_user', {'id': user.id}) }}" method="POST" style="display: inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+            <button type="submit" class="btn-delete">Eliminar Usuario</button>
+        </form>
+
+        <!-- Tabla de recetas del usuario -->
+        <table class="receta-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Imagen</th>
+                    <th>Descripción</th>
+                    <th>Tiempo de Preparación</th>
+                    <th>Porciones</th>
+                    <th>Dificultad</th>
+                    <th>Pasos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recetum in user.recetas %}
+                    <tr>
+                        <td>{{ recetum.nombre }}</td>
+                        <td>
+                            {% if recetum.png %}
+                                <a href="#" class="image-link" data-image="{{ asset(recetum.png) }}" onclick="openImageModal('{{ asset(recetum.png) }}')">
+                                    <img src="{{ asset(recetum.png|slice(1)) }}" style="width: 50px; height: auto;">
+                                </a>
+                            {% else %}
+                                <span>No disponible</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ recetum.descripcion }}</td>
+                        <td>{{ recetum.tiempoprep }}</td>
+                        <td>{{ recetum.porciones }}</td>
+                        <td>{{ recetum.dificultad }}</td>
+                        <td>
+                            <button class="btn-pasos" onclick="openModal('modal-{{ recetum.id }}')">Ver pasos</button>
+                        </td>
+                        <td>
+                            {% if recetum.visible == 'yes' %}
+                                <span class="text-success">Aprobada</span>
+                            {% else %}
+                                <span class="text-warning">Pendiente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if recetum.visible == 'no' %}
+                                <form action="{{ path('admin_approve_recipe', {'id': recetum.id}) }}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ recetum.id) }}">
+                                    <button type="submit" class="btn-approve">Aprobar</button>
+                                </form>
+                            {% endif %}
+                            <form action="{{ path('admin_delete_recipe', {'id': recetum.id}) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
+                                <button type="submit" class="btn-delete">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="no-records">Este usuario no tiene recetas</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Contenedor para los modales de pasos -->
+        {% for recetum in user.recetas %}
+            <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
+                    <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
+                    <table class="steps-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Paso</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for paso in recetum.pasos %}
+                                <tr>
+                                    <td>{{ paso.numero }}</td>
+                                    <td>{{ paso.nombre }}</td>
+                                    <td>{{ paso.descripcion }}</td>
+                                    <td>
+                                        <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
+                                        <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-show">Agregar Paso</a>
+                                        <button type="button" class="btn-delete" data-id="{{ paso.id }}" data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" data-token="{{ csrf_token('delete' ~ paso.id) }}">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">No hay pasos disponibles para esta receta.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if recetum.pasos is empty %}
+                        <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-edit">Agregar Paso</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Modal de eliminación -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
+                <button type="button" class="btn btn-danger confirmDelete">Eliminar</button>
+                <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
+            </div>
+        </div>
+
+        <!-- Modal de confirmación de eliminación -->
+        <div id="confirmacionModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Paso eliminado con éxito</h3>
+                <button type="button" id="confirmacionCerrar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

@@ -16,5 +16,14 @@
     <div class="section">
         <a href="{{ path('app_receta_index')}}">Mis recetas favoritas</a>
     </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="section">
+            <a href="{{ path('app_panel')}}">Panel de administracion</a>
+        </div>
+
+        {% endif %}
 </div>
+
+
 {% endblock %}

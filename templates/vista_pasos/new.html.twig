@@ -54,7 +54,7 @@
                                 <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
                                 <button
                                     type="button"
-                                    class="btn-eliminar"
+                                    class="btn-delete"
                                     data-id="{{ paso.id }}"
                                     data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}"
                                     data-token="{{ csrf_token('delete' ~ paso.id) }}">
