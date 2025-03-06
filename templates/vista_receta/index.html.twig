@@ -24,7 +24,7 @@
                 <td>{{ recetum.nombre }}</td>
                 <td>
                     {% if recetum.png %}
-                        <a href="#" class="image-link" data-image="{{ asset(recetum.png) }}" onclick="openImageModal('{{ asset(recetum.png) }}')">
+                        <a href="#" onclick="openImageModal('{{ asset(recetum.png) }}')">
                             <img src="{{ asset(recetum.png|slice(1)) }}" style="width: 50px; height: auto;">
                         </a>
                     {% else %}
@@ -36,13 +36,12 @@
                 <td>{{ recetum.porciones }}</td>
                 <td>{{ recetum.dificultad }}</td>
                 <td>
-                    <!-- Botón para mostrar los pasos -->
                     <button class="btn-pasos" onclick="openModal('modal-{{ recetum.id }}')">Ver pasos</button>
                 </td>
                 <td>
                     <a href="{{ path('app_vista_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
                     <a href="{{ path('app_vista_receta_edit', {'id': recetum.id}) }}" class="btn-edit">Editar</a>
-                    <a href="#" class="btn-delete" data-id="{{ recetum.id }}">Eliminar</a>
+                    <button class="btn-delete" onclick="openDeleteModal('deleteModalReceta-{{ recetum.id }}')">Eliminar</button>
                 </td>
             </tr>
         {% else %}
@@ -53,33 +52,25 @@
     </tbody>
 </table>
 
-<!-- Contenedor para los modales -->
+<!-- Modales -->
 <div id="modals-container">
     {% for recetum in recetas %}
 
-    <!-- Modal para mostrar imagen -->
-    <div id="imageModal" class="modal">
+    <!-- Modal de confirmación de eliminación de receta -->
+    <div id="deleteModalReceta-{{ recetum.id }}" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeImageModal()">&times;</span>
-            <img id="modalImage" src="" alt="Imagen de la receta" style="max-width: 100%; height: auto;">
-        </div>
-    </div>
-
-    <!-- Modal de confirmación de eliminación -->
-    <div id="deleteModal-{{ recetum.id }}" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeDeleteModal('deleteModalReceta-{{ recetum.id }}')">&times;</span>
             <h3>¿Estás seguro de que deseas eliminar esta receta?</h3>
-            <form action="{{ path('app_vista_receta_delete', {'id': recetum.id}) }}" method="POST">
+            <form id="deleteRecetaForm-{{ recetum.id }}" action="{{ path('app_vista_receta_delete', {'id': recetum.id}) }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
                 <button type="submit" class="btn btn-danger">Eliminar</button>
-                <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal('deleteModalReceta-{{ recetum.id }}')">Cancelar</button>
             </form>
         </div>
     </div>
 
     <!-- Modal para los pasos -->
-    <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
+    <div id="modal-{{ recetum.id }}" class="modal modal-steps">
         <div class="modal-content">
             <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
             <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
@@ -101,16 +92,23 @@
                             <td>
                                 <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
                                 <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-show">Agregar Paso</a>
-                                <button
-                                    type="button"
-                                    class="btn-delete"
-                                    data-id="{{ paso.id }}"
-                                    data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}"
-                                    data-token="{{ csrf_token('delete' ~ paso.id) }}">
-                                    Eliminar
-                                </button>
+                                <button class="btn-delete" onclick="openDeleteModal('deleteModalPaso-{{ paso.id }}')">Eliminar</button>
                             </td>
                         </tr>
+
+                        <!-- Modal de confirmación de eliminación de paso -->
+                        <div id="deleteModalPaso-{{ paso.id }}" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">&times;</span>
+                                <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
+                                <form id="deletePasoForm-{{ paso.id }}" action="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" method="POST">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paso.id) }}">
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">Cancelar</button>
+                                </form>
+                            </div>
+                        </div>
+
                     {% else %}
                         <tr>
                             <td colspan="4">No hay pasos disponibles para esta receta.</td>
@@ -118,32 +116,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-            <!-- Si la receta no tiene pasos, mostrar botón para agregar -->
-            {% if recetum.pasos is empty %}
-            <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-edit">Agregar Paso</a>
-
-            {% endif %}
         </div>
     </div>
     {% endfor %}
 </div>
 
-<!-- Modal de eliminación -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
-        <button type="button" class="btn btn-danger confirmDelete">Eliminar</button>
-        <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
-    </div>
-</div>
-
-<!-- Modal de confirmación de eliminación -->
-<div id="confirmacionModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h3>Paso eliminado con éxito</h3>
-        <button type="button" id="confirmacionCerrar" class="btn btn-primary">Aceptar</button>
-    </div>
-</div>
 {% endblock %}

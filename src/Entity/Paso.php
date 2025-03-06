@@ -22,10 +22,10 @@ class Paso
     #[ORM\Column(length: 10)]
     private ?string $numero = null;
 
-    #[ORM\ManyToOne(targetEntity: Receta::class, inversedBy: 'pasos', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: Receta::class, inversedBy: 'pasos')]
     #[ORM\JoinColumn(name: "receta_id", referencedColumnName: "id", onDelete: "CASCADE")]
-
     private ?Receta $receta = null;
+
 
     public function getId(): ?int
     {

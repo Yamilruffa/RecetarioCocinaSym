@@ -182,183 +182,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-//modal para eliminar pasos en los pasos de la receta del molal de la receta de la receta ah
+//modales abrir y cerrar y eliminar pasos 
 document.addEventListener("DOMContentLoaded", function () {
-    let pasoIdEliminar = null; // Guardará el ID del paso a eliminar
-    let filaEliminar = null; // Guardará la fila del paso a eliminar
-
-    // Capturar el modal y botones
-    const confirmacionModal = document.getElementById("deleteModal");
-    const confirmDeleteBtn = confirmacionModal.querySelector(".confirmDelete");
-    const cancelDeleteBtn = confirmacionModal.querySelector(".cancelBtn");
-
-    // Cuando se hace clic en un botón "Eliminar"
-    document.querySelectorAll(".btn-eliminar").forEach(button => {
-        button.addEventListener("click", function () {
-            pasoIdEliminar = this.getAttribute("data-id");
-            let url = this.getAttribute("data-url");
-            let token = this.getAttribute("data-token");
-
-            filaEliminar = this.closest("tr"); // Captura la fila para eliminarla después
-
-            console.log("ID del paso:", pasoIdEliminar);
-            console.log("URL de eliminación:", url);
-            console.log("Token CSRF:", token);
-
-            // Guardar la URL y el token en el botón de confirmación
-            confirmDeleteBtn.setAttribute("data-url", url);
-            confirmDeleteBtn.setAttribute("data-token", token);
-
-            // Mostrar el modal de confirmación
-            confirmacionModal.style.display = "block";
-        });
-    });
-
-    // Cuando el usuario confirma la eliminación
-    confirmDeleteBtn.addEventListener("click", function () {
-        let url = this.getAttribute("data-url");
-        let token = this.getAttribute("data-token");
-
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ _token: token })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error en la respuesta del servidor: " + response.status);
-            }
-            return response.json(); // Convertir la respuesta a JSON
-        })
-        .then(data => {
-            if (data.success) {
-                if (filaEliminar) {
-                    filaEliminar.remove(); // ✅ Eliminar la fila del DOM
-                }
-                confirmacionModal.style.display = "none"; // ✅ Cerrar modal
-
-                // Mostrar solo un mensaje de éxito
-                alert("Paso eliminado con éxito");
-            } else {
-                throw new Error(data.error || "No se pudo eliminar el paso.");
-            }
-        })
-        .catch(error => {
-            console.error("Error en fetch:", error);
-            alert("No se pudo eliminar el paso: " + error.message);
-        });
-    });
-
-    // Cuando el usuario cancela la eliminación
-    cancelDeleteBtn.addEventListener("click", function () {
-        confirmacionModal.style.display = "none";
-    });
-
-    // Cerrar modal si se hace clic fuera del contenido
-    window.addEventListener("click", function (event) {
-        if (event.target === confirmacionModal) {
-            confirmacionModal.style.display = "none";
+    // Función para abrir un modal por su ID
+    function openModal(modalId) {
+        let modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "block";
         }
-    });
-});
+    }
 
-
-
-// modal eliminar pasos en los pasos
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script cargado correctamente.");
-
-    let pasoIdAEliminar = null;
-    let deleteUrl = null;
-    let csrfToken = null;
-
-    // Manejo de apertura del modal de eliminación
-    document.querySelectorAll(".btn-eliminar").forEach((btn) => {
-        btn.addEventListener("click", function () {
-            pasoIdAEliminar = this.getAttribute("data-id");
-            deleteUrl = this.getAttribute("data-url");
-            csrfToken = this.getAttribute("data-token");
-
-            console.log(`Intentando eliminar el paso ID: ${pasoIdAEliminar}`);
-
-            let modal = document.getElementById("deleteModal");
-            if (modal) {
-                modal.style.display = "block";
-            } else {
-                console.error(`Modal no encontrado para el paso ID: ${pasoIdAEliminar}`);
-            }
-        });
-    });
-
-    // Manejo de cierre del modal de eliminación
-    document.querySelector(".cancelBtn").addEventListener("click", function () {
-        document.getElementById("deleteModal").style.display = "none";
-    });
-
-    document.querySelector(".close").addEventListener("click", function () {
-        document.getElementById("deleteModal").style.display = "none";
-    });
-
-    // Confirmar eliminación
-    document.querySelector(".confirmDelete").addEventListener("click", function () {
-        if (!pasoIdAEliminar || !deleteUrl) {
-            console.error("No se ha seleccionado ningún paso para eliminar.");
-            return;
-        }
-
-        console.log(`Enviando petición para eliminar paso ID: ${pasoIdAEliminar}`);
-
-        fetch(deleteUrl, {
-            method: "POST",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `_token=${csrfToken}`
-        }).then(response => {
-            if (response.ok) {
-                console.log(`Paso ID ${pasoIdAEliminar} eliminado con éxito.`);
-
-                // Cerrar el modal de eliminación
-                document.getElementById("deleteModal").style.display = "none";
-
-                // Eliminar la fila de la tabla
-                let row = document.getElementById(`row-${pasoIdAEliminar}`);
-                if (row) {
-                    row.remove();
-                } else {
-                    console.error(`No se encontró la fila del paso ID: ${pasoIdAEliminar}`);
-                }
-
-                // Mostrar el modal de confirmación
-                let confirmacionModal = document.getElementById("confirmacionModal");
-                confirmacionModal.style.display = "block";
-
-                // Cerrar automáticamente el modal de confirmación después de 2 segundos
-                setTimeout(() => {
-                    confirmacionModal.style.display = "none";
-                }, 2000);
-            } else {
-                console.error(`Error al eliminar el paso ID: ${pasoIdAEliminar}`);
-            }
-        }).catch(error => {
-            console.error("Error en la petición:", error);
-        });
-    });
-
-    // Cerrar manualmente el modal de confirmación
-    document.getElementById("confirmacionCerrar").addEventListener("click", function () {
-        document.getElementById("confirmacionModal").style.display = "none";
-    });
-
-    // Cerrar cualquier modal si se hace clic fuera del contenido
-    window.addEventListener("click", function (event) {
-        let modal = document.getElementById("deleteModal");
-        if (event.target === modal) {
+    // Función para cerrar un modal por su ID
+    function closeModal(modalId) {
+        let modal = document.getElementById(modalId);
+        if (modal) {
             modal.style.display = "none";
         }
+    }
+
+    // Función para abrir los modales de confirmación de eliminación
+    function openDeleteModal(modalId) {
+        openModal(modalId);
+    }
+
+    // Función para cerrar los modales de confirmación de eliminación
+    function closeDeleteModal(modalId) {
+        closeModal(modalId);
+    }
+
+    // Agregar eventos a los botones de eliminar receta
+    document.querySelectorAll(".btn-delete").forEach(button => {
+        button.addEventListener("click", function () {
+            let modalId = this.getAttribute("onclick").match(/'([^']+)'/)[1];
+            openDeleteModal(modalId);
+        });
+    });
+
+    // Agregar eventos a los botones de cerrar modales
+    document.querySelectorAll(".modal .close").forEach(closeBtn => {
+        closeBtn.addEventListener("click", function () {
+            let modal = this.closest(".modal");
+            if (modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+
+    // Cerrar el modal si se hace clic fuera de él
+    window.addEventListener("click", function (event) {
+        document.querySelectorAll(".modal").forEach(modal => {
+            if (event.target === modal) {
+                closeModal(modal.id);
+            }
+        });
     });
 });

@@ -92,18 +92,23 @@ public function new(int $id, Request $request, EntityManagerInterface $entityMan
 
 
 
-    #[Route('/vista/pasos/eliminar/{id}', name: 'app_vista_pasos_delete', methods: ['POST'])]
-        public function deletePaso(Paso $paso, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/pasos/{id}/delete', name: 'app_vista_pasos_delete', methods: ['POST'])]
+        public function deletePaso(Request $request, Paso $paso, EntityManagerInterface $entityManager): Response
         {
-            try {
+            
+
+            if ($this->isCsrfTokenValid('delete' . $paso->getId(), $request->request->get('_token'))) {
                 $entityManager->remove($paso);
                 $entityManager->flush();
-
-                return new JsonResponse(['success' => true]); // ✅ Respuesta clara
-            } catch (\Exception $e) {
-                return new JsonResponse(['success' => false, 'error' => 'Error al eliminar el paso'], 500);
+                $this->addFlash('success', 'Paso eliminado correctamente.');
+            } else {
+                $this->addFlash('error', 'Error al eliminar el paso.');
             }
-}
+        
+            return $this->redirectToRoute('app_vista_receta'); // Redirigir a la vista de recetas
+        }
+        
+        
 
 
 }
