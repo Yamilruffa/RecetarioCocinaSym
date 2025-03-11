@@ -20,15 +20,15 @@
                 <div class="categoria-grid">
                     {% for choice in form.categoria %}
                         <div class="categoria-item">
-                            {{ form_widget(choice) }}
-                            {{ form_label(choice) }}
+                            <div class="checkbox-container">
+                                {{ form_widget(choice) }}
+                                {{ form_label(choice) }}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-        
-        
         
 
         <div class="form-group">
@@ -37,8 +37,10 @@
                 <div class="categoria-grid">
                     {% for choice in form.ingredientes %}
                         <div class="categoria-item">
+                            <div class="checkbox-container">
                             {{ form_widget(choice) }}
                             {{ form_label(choice) }}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
@@ -57,11 +59,14 @@
     <button id="toggle-instrucciones">−</button>
     <h2>Instrucciones:</h2>
     <ol>
-        <li>Primero coloque el nombre de la receta.</li>
-        <li>Luego, si lo desea y recomendamos, suba una imagen para su receta.</li>
-        <li>Coloque una breve descripción de su receta.</li>
-        <li>Complete los demás campos.</li>
-        <li>A continuación, cliquee siguiente.</li>
+        <li>Nombre su receta.</li>
+        <li>Luego, si lo desea puede subin una imagen de su receta.</li>
+        <li>Coloque una breve descripción de la misma, Aqui puede ir la lista de ingredientes y medidas.</li>
+        <li>Indique el tiempo de preparacion.</li>
+        <li>Elija el nivel de dificultad que considere apropiado.</li>
+        <li>Seleccione una o varias categorias a las  que pertenece su receta.</li>
+        <li>Seleccione los ingredientes que lleve su receta.</li>
+        <li>Una vez revisado todo, elija la opcion "siguiente" y a continuacion especificaremos los pasos para realizar su receta.</li>
     </ol>
 </div>
 {% endblock %}

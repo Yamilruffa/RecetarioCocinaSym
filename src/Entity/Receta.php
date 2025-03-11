@@ -24,7 +24,7 @@ class Receta
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descripcion = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(length: 30, nullable: true)]
     private ?string $tiempoprep = null;
 
     #[ORM\Column(length: 2, nullable: true)]

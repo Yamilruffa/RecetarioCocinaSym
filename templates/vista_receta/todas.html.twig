@@ -1,0 +1,58 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %} Recetas {% endblock %}
+
+{% block body %}
+
+
+    <!-- Mostrar las categorías como botones -->
+    <div class="categoriasBOTONES-container">
+        {% for categoria in categorias %}
+            <a href="{{ path('app_vista_receta_lista', {categoria: categoria.nombre}) }}" class="categoria-boton">
+                {{ categoria.nombre }}
+            </a>
+        {% endfor %}
+    </div>
+
+
+    <!-- Mostrar la lista de recetas -->
+    <table class="receta-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Descripción</th>
+                <th>Tiempo de Preparación</th>
+                <th>Porciones</th>
+                <th>Dificultad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recetum in recetas %}
+                <tr>
+                    <td>{{ recetum.nombre }}</td>
+                    <td>
+                        {% if recetum.png %}
+                            <a href="#" onclick="openImageModal('{{ asset(recetum.png) }}')">
+                                <img src="{{ asset(recetum.png|slice(1)) }}" style="width: 50px; height: auto;">
+                            </a>
+                        {% else %}
+                            <span>No disponible</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ recetum.descripcion }}</td>
+                    <td>{{ recetum.tiempoprep }}</td>
+                    <td>{{ recetum.porciones }}</td>
+                    <td>{{ recetum.dificultad }}</td>
+                    <td>
+                        <a href="{{ path('app_vista_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9" class="no-records">No se encontraron recetas</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

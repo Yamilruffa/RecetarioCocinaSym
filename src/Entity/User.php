@@ -191,6 +191,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+        ////////////////////////////////////////////////////////////////
+        #[ORM\OneToOne(mappedBy: 'usuario', cascade: ['persist', 'remove'])]
+        private ?Persona $persona = null;
+    
+        // Método para obtener la persona asociada
+        public function getPersona(): ?Persona
+        {
+            return $this->persona;
+        }
+    
+        public function setPersona(?Persona $persona): static
+        {
+            $this->persona = $persona;
+    
+            return $this;
+        }
+        ////////////////////////////////////////////////////////////////
+
     
 
 }

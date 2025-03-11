@@ -116,4 +116,5 @@ class VistaRecetaController extends AbstractController
         return $this->redirectToRoute('app_vista_receta', [], Response::HTTP_SEE_OTHER);
     }
 
+
 }

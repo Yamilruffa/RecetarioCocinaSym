@@ -5,6 +5,16 @@
 {% block body %}
 <div class="body-perfil">
 
+    <div class="contenedor-instrucciones">
+        <div class="instrucciones" id="instrucciones">
+            <button id="toggle-instrucciones">−</button>
+            <ol>
+            <h2>Informacion:</h2>
+                <li>Toda receta debe ser aprobada por un administrador antes de estar disponible en la pagina.</li>
+                <li>Tus recetas pueden ser modificadas en la pestaña "MIS RECETAS".</li>
+            </ol>
+        </div>
+
     <div class="section">
         <a href="{{ path('app_vista_receta_new')}}">Crear recetas</a>
     </div>
@@ -14,7 +24,7 @@
     </div>
 
     <div class="section">
-        <a href="{{ path('app_receta_index')}}">Mis recetas favoritas</a>
+        <a href="#">Mis recetas favoritas</a>
     </div>
 
         {% if is_granted('ROLE_ADMIN') %}

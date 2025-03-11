@@ -64,7 +64,7 @@
             <form id="deleteRecetaForm-{{ recetum.id }}" action="{{ path('app_vista_receta_delete', {'id': recetum.id}) }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
                 <button type="submit" class="btn btn-danger">Eliminar</button>
-                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal('deleteModalReceta-{{ recetum.id }}')">Cancelar</button>
+                <button type="button" class="btn btn-secondary cancelBtn" onclick="closeDeleteModal('deleteModalReceta-{{ recetum.id }}')">Cancelar</button>
             </form>
         </div>
     </div>
@@ -104,7 +104,7 @@
                                 <form id="deletePasoForm-{{ paso.id }}" action="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" method="POST">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paso.id) }}">
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary cancelBtn" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">Cancelar</button>
                                 </form>
                             </div>
                         </div>
@@ -116,6 +116,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% if recetum.pasos is empty %}
+                        <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-edit">Agregar Paso</a>
+                    {% endif %}
         </div>
     </div>
     {% endfor %}

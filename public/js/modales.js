@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-//modales abrir y cerrar y eliminar pasos 
+//modales abrir y cerrar y eliminar pasos
 document.addEventListener("DOMContentLoaded", function () {
     // Función para abrir un modal por su ID
     function openModal(modalId) {
@@ -215,6 +215,14 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", function () {
             let modalId = this.getAttribute("onclick").match(/'([^']+)'/)[1];
             openDeleteModal(modalId);
+        });
+    });
+
+    // Agregar eventos a los botones de aprobar receta
+    document.querySelectorAll(".btn-approve").forEach(button => {
+        button.addEventListener("click", function () {
+            let modalId = this.getAttribute("onclick").match(/'([^']+)'/)[1];
+            openModal(modalId);
         });
     });
 

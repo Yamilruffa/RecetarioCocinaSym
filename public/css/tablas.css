@@ -381,7 +381,7 @@
 }
 
 /* Estilos para los botones de editar y eliminar */
-.btn-edit, .btn-delete {
+.btn-edit, .btn-delete, .btn-approve, .btn-warning {
     padding: 5px 10px;
     color: white;
     text-decoration: none;
@@ -389,6 +389,22 @@
     margin-right: 10px;
     display: inline-block;
     font-size: 14px;
+}
+
+.btn-warning {
+    background-color:  #47855b;
+}
+
+.btn-warning:hover {
+    background-color: #64a377;
+}
+
+.btn-approve {
+    background-color: #47855b;
+}
+
+.btn-approve:hover {
+    background-color: #64a377;
 }
 
 .btn-edit {

@@ -11,10 +11,20 @@
         <h2>Usuario: {{ user.email }}</h2>
 
         <!-- Botón para eliminar usuario -->
-        <form action="{{ path('admin_delete_user', {'id': user.id}) }}" method="POST" style="display: inline;">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-            <button type="submit" class="btn-delete">Eliminar Usuario</button>
-        </form>
+        <button class="btn-delete" onclick="openDeleteModal('deleteModalUser-{{ user.id }}')">Eliminar Usuario</button>
+
+        <!-- Modal de confirmación de eliminación de usuario -->
+        <div id="deleteModalUser-{{ user.id }}" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('deleteModalUser-{{ user.id }}')">&times;</span>
+                <h3>¿Estás seguro de que deseas eliminar a este usuario?</h3>
+                <form action="{{ path('admin_delete_user', {'id': user.id}) }}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_user' ~ user.id) }}">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModalUser-{{ user.id }}')">Cancelar</button>
+                </form>
+            </div>
+        </div>
 
         <!-- Tabla de recetas del usuario -->
         <table class="receta-table">
@@ -52,23 +62,53 @@
                             <button class="btn-pasos" onclick="openModal('modal-{{ recetum.id }}')">Ver pasos</button>
                         </td>
                         <td>
-                            {% if recetum.visible == 'yes' %}
-                                <span class="text-success">Aprobada</span>
-                            {% else %}
-                                <span class="text-warning">Pendiente</span>
+                            {% if recetum.visible == 'si' %}
+                                <span class="text-success">Visible</span>
+                            {% elseif recetum.visible == "no" %}
+                                <span class="text-warning">Oculta</span>
                             {% endif %}
                         </td>
                         <td>
-                            {% if recetum.visible == 'no' %}
-                                <form action="{{ path('admin_approve_recipe', {'id': recetum.id}) }}" method="POST" style="display: inline;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ recetum.id) }}">
-                                    <button type="submit" class="btn-approve">Aprobar</button>
-                                </form>
-                            {% endif %}
-                            <form action="{{ path('admin_delete_recipe', {'id': recetum.id}) }}" method="POST" style="display: inline;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
-                                <button type="submit" class="btn-delete">Eliminar</button>
+                            {% if recetum.visible == 'si' %}
+                            <!-- Botón Ocultar -->
+                            <form action="{{ path('admin_hide_recipe', {'id': recetum.id}) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('hide_recipe' ~ recetum.id) }}">
+                                <button type="submit" class="btn btn-warning">Ocultar</button>
                             </form>
+                            {% elseif recetum.visible == 'no' %}
+                                <!-- Botón Aprobar -->
+                                <button class="btn-approve" onclick="openModal('approveModal-{{ recetum.id }}')">Aprobar</button>
+
+                                <!-- Modal de confirmación de aprobación -->
+                                <div id="approveModal-{{ recetum.id }}" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeModal('approveModal-{{ recetum.id }}')">&times;</span>
+                                        <h3>¿Estás seguro de que deseas aprobar esta receta?</h3>
+                                        <form action="{{ path('admin_approve_recipe', {'id': recetum.id}) }}" method="POST">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('approve_recipe' ~ recetum.id) }}">
+                                            <button type="submit" class="btn btn-success">Aprobar</button>
+                                            <button type="button" class="btn btn-secondary" onclick="closeModal('approveModal-{{ recetum.id }}')">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            
+                            <!-- Botón Eliminar -->
+                            <button class="btn-delete" onclick="openDeleteModal('deleteModalReceta-{{ recetum.id }}')">Eliminar</button>
+
+                            <!-- Modal de confirmación de eliminación de receta -->
+                            <div id="deleteModalReceta-{{ recetum.id }}" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal('deleteModalReceta-{{ recetum.id }}')">&times;</span>
+                                    <h3>¿Estás seguro de que deseas eliminar esta receta?</h3>
+                                    <form action="{{ path('admin_delete_recipe', {'id': recetum.id}) }}" method="POST">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recetum.id) }}">
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModalReceta-{{ recetum.id }}')">Cancelar</button>
+                                    </form>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 {% else %}
@@ -79,9 +119,12 @@
             </tbody>
         </table>
 
-        <!-- Contenedor para los modales de pasos -->
-        {% for recetum in user.recetas %}
-            <div id="modal-{{ recetum.id }}" class="modal modal-steps" style="display: none;">
+        <!-- Modales -->
+        <div id="modals-container">
+            {% for recetum in user.recetas %}
+
+            <!-- Modal para los pasos -->
+            <div id="modal-{{ recetum.id }}" class="modal modal-steps">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('modal-{{ recetum.id }}')">&times;</span>
                     <h2>Pasos de la receta: {{ recetum.nombre }}</h2>
@@ -103,11 +146,23 @@
                                     <td>
                                         <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
                                         <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-show">Agregar Paso</a>
-                                        <button type="button" class="btn-delete" data-id="{{ paso.id }}" data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" data-token="{{ csrf_token('delete' ~ paso.id) }}">
-                                            Eliminar
-                                        </button>
+                                        <button class="btn-delete" onclick="openDeleteModal('deleteModalPaso-{{ paso.id }}')">Eliminar</button>
                                     </td>
                                 </tr>
+
+                                <!-- Modal de confirmación de eliminación de paso -->
+                                <div id="deleteModalPaso-{{ paso.id }}" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeModal('deleteModalPaso-{{ paso.id }}')">&times;</span>
+                                        <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
+                                        <form action="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" method="POST">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paso.id) }}">
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModalPaso-{{ paso.id }}')">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
+
                             {% else %}
                                 <tr>
                                     <td colspan="4">No hay pasos disponibles para esta receta.</td>
@@ -116,29 +171,13 @@
                         </tbody>
                     </table>
                     {% if recetum.pasos is empty %}
-                        <a href="{{ path('app_vista_pasos_new', {'id': recetum.id}) }}" class="btn-edit">Agregar Paso</a>
+                        <a href="{{ path('app_vista_pasos_new_panel', {'id': recetum.id}) }}" class="btn-edit">Agregar Paso</a>
                     {% endif %}
                 </div>
             </div>
-        {% endfor %}
-
-        <!-- Modal de eliminación -->
-        <div id="deleteModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
-                <button type="button" class="btn btn-danger confirmDelete">Eliminar</button>
-                <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
-            </div>
+            {% endfor %}
         </div>
 
-        <!-- Modal de confirmación de eliminación -->
-        <div id="confirmacionModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <h3>Paso eliminado con éxito</h3>
-                <button type="button" id="confirmacionCerrar" class="btn btn-primary">Aceptar</button>
-            </div>
-        </div>
     {% endif %}
 {% endfor %}
 

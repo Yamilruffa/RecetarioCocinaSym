@@ -57,7 +57,11 @@ class RecetaType extends AbstractType
                 'class' => Ingrediente::class,
                 'multiple' => true,
                 'expanded' => true,
-                'choice_label' => 'nombre'
+                'choice_label' => 'nombre',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.nombre', 'ASC');
+                },
             ])
             //escondo el usuario
             ->add('usuario', HiddenType::class,[
@@ -69,15 +73,15 @@ class RecetaType extends AbstractType
         if (isset($options['user']) && in_array('ROLE_ADMIN', $options['user']->getRoles())) {
             $builder->add('visible', ChoiceType::class, [
                 'choices' => [
-                    'Sí' => '1',
-                    'No' => '0',
+                    'Sí' => 'si',
+                    'No' => 'no',
                 ],
-                'data' => '0', // Valor por defecto
+                'data' => 'no', // Valor por defecto "no" para admin
             ]);
         } else {
+            // Si el usuario no es administrador, establecer 'visible' como 'no' y ocultar el campo
             $builder->add('visible', HiddenType::class, [
-                'mapped' => false,
-                'data' => '0', // Valor por defecto 'No'
+                'data' => 'no', // Valor por defecto 'no' para usuarios no admin
             ]);
         }
     }

@@ -442,6 +442,30 @@ html {
     max-width: 90%;
 }
 
+.categoriasBOTONES-container {
+    display: flex;
+    padding-left: 1em;
+    padding-top: 2em;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.categoria-boton {
+    background-color: hsl(346, 78%, 78%); /* Rosa pastel */
+    color: black;
+    padding-top: 2em;
+    padding: 1em 15px; /* 1em en top y bottom, 15px en left y right */
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.categoria-boton:hover {
+    background-color: #f08fa3; /* Rosa pastel más oscuro */
+}
+
 
 
 

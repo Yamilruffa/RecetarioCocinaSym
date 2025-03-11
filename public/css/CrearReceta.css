@@ -191,6 +191,32 @@ fieldset {
     border-radius: 8px 8px 0 0;
 }
 
+.categoria-item {
+    margin-bottom: 15px; /* Espacio entre las opciones */
+}
+
+.checkbox-container {
+    border: 2px solid #000000d6; /* Borde de cada opción */
+    padding: 10px; /* Espaciado dentro del rectángulo */
+    border-radius: 5px; /* Bordes redondeados opcionales */
+    display: flex;
+    align-items: center; /* Alinea el checkbox y el texto */
+    margin-bottom: 0.01em; /* Separación entre las opciones */
+    background-color: #f9f9f9; /* Fondo claro para diferenciar cada opción */
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 5px; /* Espacio entre el checkbox y el texto */
+}
+
+.checkbox-container label {
+    font-size: 13px; /* Tamaño de fuente del texto */
+}
+
+.checkbox-container:hover {
+    background-color: #eaeaea; /* Cambio de color al pasar el ratón sobre una opción */
+}
+
 /* Media query para pantallas pequeñas */
 @media (max-width: 768px) {
     .instrucciones {
