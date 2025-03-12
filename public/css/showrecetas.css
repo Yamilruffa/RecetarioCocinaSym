@@ -108,7 +108,7 @@ th, td {
 }
 
 /* Estilo para el botón Volver */
-.btn-back {
+.btn-back, .btn-favorite {
     display: inline-block;
     padding: 10px 20px;
     background-color: #e55039;
@@ -118,6 +118,10 @@ th, td {
     font-weight: bold;
     font-size: 16px;
     margin-top: 20px;
+}
+
+.btn-favorite:hover {
+background-color: #c0392b;
 }
 
 .btn-back:hover {

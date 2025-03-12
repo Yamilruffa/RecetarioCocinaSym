@@ -146,7 +146,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 60px;
     margin: 2rem auto;
     max-width: 800px;
     padding: 1rem;
@@ -156,10 +156,11 @@ main {
 .section {
     width: 100%;
     max-width: 400px;
-    padding: 1rem;
+    padding: 1.5rem;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .section:nth-child(1) {
@@ -468,6 +469,61 @@ html {
 
 
 
+.destacado {
+    background-color: #f5a1a8; /* Fondo rosado */
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+    text-align: center;
+    width: 70%; /* Aumenta el ancho para destacar más */
+    max-width: 1000px; /* Limita el tamaño máximo */
+    margin: 40px auto; /* Centrar con más margen */
+    border: 4px solid #d9534f; /* Borde rojo fuerte para destacar */
+}
+
+/* Hacer que el texto sea más grande y llamativo */
+.destacado h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #721c24;
+}
+
+.destacado p {
+    font-size: 1.8rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+
+/* ESTILOS PARA LA SECCIÓN "¿NO SABES QUÉ COCINAR HOY?" */
+.receta-random-container {
+    width: 90%;
+    max-width: none;
+    margin: 40px auto;
+    text-align: center;
+}
+
+/* Título en un bloque diferente */
+.receta-random-titulo {
+    background-color: #f9c2c1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Contenido en otro bloque */
+.receta-random-contenido {
+    background-color: #edc1c1;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+/* HACER QUE LA IMAGEN SEA MÁS GRANDE */
+.receta-random-img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+}
 
 
 @media(max-width: 800px){

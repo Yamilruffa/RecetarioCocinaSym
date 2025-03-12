@@ -9,11 +9,11 @@
             <button id="toggle-instrucciones">−</button>
             <h2>Instrucciones:</h2>
             <ol>
-                <li>Ahora explicaremos los pasos en orden numerico.</li>
+                <li>Ahora explicaremos los pasos en orden numérico.</li>
                 <li>Primero coloque el nombre que defina el paso.</li>
-                <li>Luego coloque la descripcion del paso.</li>
-                <li>Indique cual es el numero de este paso.</li>
-                <li>Una vez finalizado el formulario, si desea agregar otro paso, elija la opcion "agregar otro paso", de lo contrario coloque "finalizar".</li>
+                <li>Luego coloque la descripción del paso.</li>
+                <li>Indique cuál es el número de este paso.</li>
+                <li>Una vez finalizado el formulario, si desea agregar otro paso, elija la opción "Agregar otro paso", de lo contrario seleccione "Finalizar".</li>
             </ol>
         </div>
     </div>
@@ -46,21 +46,33 @@
                 </thead>
                 <tbody>
                     {% for paso in pasos %}
-                        <tr id="row-{{ paso.id }}">
+                        <tr>
                             <td>{{ paso.numero }}</td>
                             <td>{{ paso.nombre }}</td>
                             <td>{{ paso.descripcion }}</td>
                             <td>
                                 <a href="{{ path('app_vista_pasos_edit', {'id': paso.id}) }}" class="btn-edit">Editar</a>
-                                <button
-                                    type="button"
-                                    class="btn-delete"
-                                    data-id="{{ paso.id }}"
-                                    data-url="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}"
-                                    data-token="{{ csrf_token('delete' ~ paso.id) }}">
-                                    Eliminar
-                                </button>
+
+                                <!-- Botón para abrir el modal de eliminación -->
+                                <button type="button" class="btn-delete" onclick="openDeleteModal('deleteModalPaso-{{ paso.id }}')">Eliminar</button>
+
+                                <!-- Modal de confirmación de eliminación -->
+                                <div id="deleteModalPaso-{{ paso.id }}" class="modal" style="display: none;">
+                                    <div class="modal-content">
+                                        <span class="close" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">&times;</span>
+                                        <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
+                                        <form id="deletePasoForm-{{ paso.id }}" action="{{ path('app_vista_pasos_delete', {'id': paso.id}) }}" method="POST">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paso.id) }}">
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            <button type="button" class="btn btn-secondary cancelBtn" onclick="closeDeleteModal('deleteModalPaso-{{ paso.id }}')">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No hay pasos agregados.</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -69,24 +81,14 @@
     </div>
 </div>
 
-<!-- Modal de eliminación -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>¿Estás seguro de que deseas eliminar este paso?</h3>
-        <button type="button" class="btn btn-danger confirmDelete">Eliminar</button>
-        <button type="button" class="btn btn-secondary cancelBtn">Cancelar</button>
-    </div>
-</div>
+<script>
+    function openDeleteModal(id) {
+        document.getElementById(id).style.display = 'block';
+    }
 
-<!-- Modal de confirmación de eliminación -->
-<div id="confirmacionModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h3>Paso eliminado con éxito</h3>
-        <button type="button" id="confirmacionCerrar" class="btn btn-primary">Aceptar</button>
-    </div>
-</div>
-
-
+    function closeDeleteModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+</script>
 
 {% endblock %}

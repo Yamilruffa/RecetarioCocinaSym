@@ -6,7 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 //
-
+use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Categoria;
 use App\Form\CategoriaType;
 use App\Repository\CategoriaRepository;
@@ -54,16 +55,28 @@ class HomeController extends AbstractController
     }
 
 
-    // Ruta para mostrar los detalles de una receta
+    // Esta no la uso enrealidad, porque uso el 'app_vista_receta_show' de VistaRecetaController
     #[Route('/receta/{id}', name: 'vista_receta_show')]
-    public function show(Receta $receta): Response
+    public function show(Receta $receta, Connection $connection): Response
     {
         if ($receta->getVisible() !== 'si') {
             throw $this->createNotFoundException('La receta no está disponible.');
         }
-        
+
+        $user = $this->getUser();
+        $isFavorite = false;
+
+        if ($user) {
+            $userId = $connection->fetchOne('SELECT id FROM `user` WHERE email = ?', [$user->getUserIdentifier()]);
+            $isFavorite = (bool) $connection->fetchOne(
+                'SELECT 1 FROM user_receta WHERE user_id = ? AND receta_id = ?',
+                [$userId, $receta->getId()]
+            );
+        }
+
         return $this->render('vista_receta/show.html.twig', [
             'recetum' => $receta,
+            'isFavorite' => $isFavorite
         ]);
     }
 
@@ -108,6 +121,38 @@ class HomeController extends AbstractController
             'recetas' => $recetas,
             'categorias' => $categorias,
         ]);
+    }
+
+    #[Route('/favoritos/toggle/{id}', name: 'favoritos_toggle', methods: ['POST'])]
+    public function toggleFavorite(int $id, Connection $connection): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['success' => false, 'error' => 'No autenticado'], 401);
+        }
+
+        $userId = $connection->fetchOne('SELECT id FROM `user` WHERE email = ?', [$user->getUserIdentifier()]);
+
+        // Verificar si la receta ya está en favoritos
+        $isFavorite = (bool) $connection->fetchOne(
+            'SELECT 1 FROM user_receta WHERE user_id = ? AND receta_id = ?',
+            [$userId, $id]
+        );
+
+        if ($isFavorite) {
+            $connection->executeStatement(
+                'DELETE FROM user_receta WHERE user_id = ? AND receta_id = ?',
+                [$userId, $id]
+            );
+            return new JsonResponse(['success' => true, 'action' => 'removed']);
+        } else {
+            $connection->executeStatement(
+                'INSERT INTO user_receta (user_id, receta_id) VALUES (?, ?)',
+                [$userId, $id]
+            );
+            return new JsonResponse(['success' => true, 'action' => 'added']);
+        }
     }
 
 

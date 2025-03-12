@@ -30,39 +30,44 @@ class VistaPasosController extends AbstractController
     }
 
     #[Route('/vista/receta/{id}/pasos/agregar', name: 'app_vista_pasos_new', methods: ['GET', 'POST'])]
-public function new(int $id, Request $request, EntityManagerInterface $entityManager, RecetaRepository $recetaRepository, PasoRepository $pasoRepository): Response
-{
-    $receta = $recetaRepository->find($id);
+    public function new(int $id, Request $request, EntityManagerInterface $entityManager, RecetaRepository $recetaRepository, PasoRepository $pasoRepository): Response
+    {
+        $receta = $recetaRepository->find($id);
 
-    if (!$receta) {
-        return new Response('Error: No se encontró la receta.', Response::HTTP_BAD_REQUEST);
-    }
-
-    $paso = new Paso();
-    $paso->setReceta($receta);
-
-    $form = $this->createForm(PasoType::class, $paso, ['receta_actual' => $receta]);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->persist($paso);
-        $entityManager->flush();
-
-        // 🔹 Detecta si el usuario presionó el botón "Finalizar"
-        if ($request->request->get('action') === 'finalizar') {
-            return $this->redirectToRoute('app_vista_receta', ['id' => $receta->getId()]);
+        if (!$receta) {
+            return new Response('Error: No se encontró la receta.', Response::HTTP_BAD_REQUEST);
         }
 
-        // 🔹 Si el usuario presionó "Agregar otro paso", recargar la misma vista
-        return $this->redirectToRoute('app_vista_pasos_new', ['id' => $receta->getId()]);
+        $paso = new Paso();
+        $paso->setReceta($receta);
+
+        // Obtener el último número de paso registrado para esta receta
+        $ultimoPaso = $pasoRepository->findOneBy(['receta' => $receta], ['numero' => 'DESC']);
+        $nuevoNumero = $ultimoPaso ? $ultimoPaso->getNumero() + 1 : 1; // Si no hay pasos, empieza en 1
+
+        $paso->setNumero($nuevoNumero); // Asignar el nuevo número de paso
+
+        $form = $this->createForm(PasoType::class, $paso, ['receta_actual' => $receta]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($paso);
+            $entityManager->flush();
+
+            if ($request->request->get('action') === 'finalizar') {
+                return $this->redirectToRoute('app_vista_receta', ['id' => $receta->getId()]);
+            }
+
+            return $this->redirectToRoute('app_vista_pasos_new', ['id' => $receta->getId()]);
+        }
+
+        return $this->render('vista_pasos/new.html.twig', [
+            'form' => $form->createView(),
+            'pasos' => $pasoRepository->findBy(['receta' => $receta], ['numero' => 'ASC']),
+            'receta' => $receta,
+        ]);
     }
 
-    return $this->render('vista_pasos/new.html.twig', [
-        'form' => $form->createView(),
-        'pasos' => $pasoRepository->findBy(['receta' => $receta]),
-        'receta' => $receta,
-    ]);
-}
 
 
 
@@ -94,20 +99,36 @@ public function new(int $id, Request $request, EntityManagerInterface $entityMan
 
 
     #[Route('/pasos/{id}/delete', name: 'app_vista_pasos_delete', methods: ['POST'])]
-        public function deletePaso(Request $request, Paso $paso, EntityManagerInterface $entityManager): Response
-        {
-            
+    public function deletePaso(Request $request, Paso $paso, EntityManagerInterface $entityManager): Response
+    {
+        $receta = $paso->getReceta(); // Obtener la receta a la que pertenece el paso
 
-            if ($this->isCsrfTokenValid('delete' . $paso->getId(), $request->request->get('_token'))) {
-                $entityManager->remove($paso);
-                $entityManager->flush();
-                $this->addFlash('success', 'Paso eliminado correctamente.');
-            } else {
-                $this->addFlash('error', 'Error al eliminar el paso.');
+        if ($this->isCsrfTokenValid('delete' . $paso->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($paso);
+            $entityManager->flush();
+
+            // Obtener y reordenar los pasos restantes
+            $pasos = $entityManager->getRepository(Paso::class)->findBy(
+                ['receta' => $receta],
+                ['numero' => 'ASC'] // Ordenados por número
+            );
+
+            $nuevoNumero = 1;
+            foreach ($pasos as $p) {
+                $p->setNumero($nuevoNumero++);
+                $entityManager->persist($p);
             }
-        
-            return $this->redirectToRoute('app_vista_receta'); // Redirigir a la vista de recetas
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Paso eliminado y reordenado correctamente.');
+        } else {
+            $this->addFlash('error', 'Error al eliminar el paso.');
         }
+
+        return $this->redirect($request->headers->get('referer')); // Recargar la misma vista
+    }
+
+        
         
         
 

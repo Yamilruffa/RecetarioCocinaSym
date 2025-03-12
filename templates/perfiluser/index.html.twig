@@ -24,8 +24,11 @@
     </div>
 
     <div class="section">
-        <a href="#">Mis recetas favoritas</a>
+    {% if app.user %}
+    <a href="{{ path('app_recetas_favoritas') }}">Mis Favoritos</a>
+    {% endif %}
     </div>
+
 
         {% if is_granted('ROLE_ADMIN') %}
         <div class="section">

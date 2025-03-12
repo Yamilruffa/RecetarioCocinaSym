@@ -1,0 +1,48 @@
+{% extends 'basehome.html.twig' %}
+
+{% block title %}Recetas Favoritas{% endblock %}
+
+{% block body %}
+<h2>Mis Recetas Favoritas</h2>
+
+{% if recetas is empty %}
+    <p>No tienes recetas favoritas aún.</p>
+{% else %}
+    <table class="receta-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Descripción</th>
+                <th>Tiempo de Preparación</th>
+                <th>Porciones</th>
+                <th>Dificultad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recetum in recetas %}
+                <tr>
+                    <td>{{ recetum.nombre }}</td>
+                    <td>
+                        {% if recetum.png %}
+                            <a href="#" onclick="openImageModal('{{ asset(recetum.png|slice(1)) }}')">
+                                <img src="{{ asset(recetum.png|slice(1)) }}" style="width: 50px; height: auto;">
+                            </a>
+                        {% else %}
+                            <span>No disponible</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ recetum.descripcion }}</td>
+                    <td>{{ recetum.tiempoprep }}</td>
+                    <td>{{ recetum.porciones }}</td>
+                    <td>{{ recetum.dificultad }}</td>
+                    <td>
+                        <a href="{{ path('app_vista_receta_show', {'id': recetum.id}) }}" class="btn-show">Ver</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Doctrine\ORM\EntityRepository;
-
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class RecetaType extends AbstractType
@@ -27,10 +27,17 @@ class RecetaType extends AbstractType
             ->add('png', FileType::class, [
                 'label' => 'Imagen',
                 'mapped' => false,  // No está mapeado directamente a la propiedad 'png' de la entidad
-                'required' => false, // No es obligatorio
+                'required' => true,
                 'attr' => ['accept' => 'image/*'], // Acepta todo tipo de imágenes
             ])
-            ->add('descripcion')
+            ->add('descripcion', TextareaType::class, [
+                'label' => 'Descripción',
+                'attr' => [
+                    'rows' => 7,  // Controla la altura inicial
+                    'style' => 'width: 100%; resize: vertical;', // Ancho completo y permite ajustar altura
+                    'placeholder' => 'Escribe aquí la descripción de la receta...', // Texto de ayuda
+                ],
+            ])
             ->add('tiempoprep', null, [
                 'label' => 'Tiempo de preparación'
             ])

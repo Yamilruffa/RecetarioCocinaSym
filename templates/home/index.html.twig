@@ -12,21 +12,20 @@
     </section>
 </main>
 
-
+<!-- Contenedor Flex con dos columnas: "Recetas Destacadas" y el Carrusel -->
 <div class="contenedor-flex">
-
-    <div class="textouno">
+    <div class="destacado">
         <h2>Recetas Destacadas</h2>
         <p>Descubre las recetas más populares de nuestra comunidad.</p>
     </div>
-    
+
     <div class="carousel-container">
         <div class="carousel">
             <div class="carousel-track-container">
                 <ul class="carousel-track">
                     {% for receta in recetas %}
                     <li class="carousel-slide {% if loop.first %}current-slide{% endif %}">
-                        <a href="{{ path('vista_receta_show', {'id': receta.id}) }}">
+                        <a href="{{ path('app_vista_receta_show', {'id': receta.id}) }}">
                             <img src="{{ asset(receta.png|slice(1)) }}" alt="{{ receta.nombre }}" class="carousel-image" loading="lazy">
                         </a>
                         <h3 class="carousel-title">{{ receta.nombre }}</h3>
@@ -44,21 +43,23 @@
             </div>
         </div>
     </div>
-
 </div>
 
-
-
-<div class="receta-random">
-    <h2>¿No sabes qué cocinar hoy? Prueba la receta del día:</h2>
-    {% if recetaRandom %}
-        <a href="{{ path('vista_receta_show', {'id': recetaRandom.id}) }}">
-            <img src="{{ asset(recetaRandom.png|slice(1)) }}" alt="{{ recetaRandom.nombre }}" class="receta-random-img" loading="lazy">
-
-        </a>
-    {% else %}
-        <p>No hay recetas disponibles en este momento. ¡Vuelve pronto!</p>
-    {% endif %}
+<!-- Sección "¿No sabes qué cocinar hoy?" con dos div separados -->
+<div class="receta-random-container">
+    <div class="receta-random-titulo">
+        <h2>¿No sabes qué cocinar hoy?</h2>
+    </div>
+    <div class="receta-random-contenido">
+        <h3>Prueba la receta del día:</h3>
+        {% if recetaRandom %}
+            <a href="{{ path('app_vista_receta_show', {'id': recetaRandom.id}) }}">
+                <img src="{{ asset(recetaRandom.png|slice(1)) }}" alt="{{ recetaRandom.nombre }}" class="receta-random-img" loading="lazy">
+            </a>
+        {% else %}
+            <p>No hay recetas disponibles en este momento. ¡Vuelve pronto!</p>
+        {% endif %}
+    </div>
 </div>
 
 <div id="sobre-nosotros" class="sobre-nosotros">
@@ -81,6 +82,5 @@
         </div>
     </div>
 </footer>
-
 
 {% endblock %}

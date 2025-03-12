@@ -10,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use App\Entity\Receta;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class PasoType extends AbstractType
 {
@@ -17,8 +19,24 @@ class PasoType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('descripcion')
-            ->add('numero')
+            ->add('descripcion', TextareaType::class, [
+                'label' => 'Descripción',
+                'attr' => [
+                    'rows' => 7,  // Controla la altura inicial
+                    'style' => 'width: 100%; resize: vertical;', // Ancho completo y permite ajustar altura
+                    'placeholder' => 'Escribe aquí la descripción de la receta...', // Texto de ayuda
+                ],
+            ])
+            ->add('numero', IntegerType::class, [
+                'label' => false, // Oculta la etiqueta
+                'attr' => [
+                    'readonly' => true, // Evita que el usuario lo edite
+                    'hidden' => true,   // Lo oculta visualmente sin afectar su envío
+                    'min' => 1,
+                    'step' => 1,
+                ],
+            ])
+            
             ->add('receta', EntityType::class, [
                 'class' => Receta::class,  // La clase de la entidad Receta
                 'choice_label' => 'nombre', // El campo que se mostrará al usuario
