@@ -22,7 +22,7 @@ class Persona
     #[ORM\Column(length: 10)]
     private ?string $dni = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: "persona", cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $usuario = null;
 

@@ -17,6 +17,9 @@ use App\Repository\UserRepository;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use App\Repository\CalificacionRepository;
+use App\Entity\Calificacion;
+use Symfony\Component\Security\Core\Security;
 
 
 
@@ -109,7 +112,6 @@ class VistaRecetaController extends AbstractController
 
 
 
-
     #[Route('vista/receta/{id}/show', name: 'app_vista_receta_show', methods: ['GET', 'POST'])]
     public function show(Receta $recetum, Request $request, Connection $connection): Response
     {
@@ -123,6 +125,15 @@ class VistaRecetaController extends AbstractController
                 [$userId, $recetum->getId()]
             );
         }
+
+        // Obtener el promedio de calificaciones para la receta
+        $promedio = $connection->fetchOne(
+            'SELECT AVG(calificacion) FROM calificacion WHERE receta_id = ?',
+            [$recetum->getId()]
+        );
+
+        // Si no hay calificaciones, establecer el promedio como NULL
+        $promedio = $promedio !== null ? number_format($promedio, 1) : null;
 
         if ($request->isXmlHttpRequest() && $request->isMethod('POST')) {
             if (!$user) {
@@ -142,13 +153,11 @@ class VistaRecetaController extends AbstractController
 
         return $this->render('vista_receta/show.html.twig', [
             'recetum' => $recetum,
-            'isFavorite' => $isFavorite
+            'isFavorite' => $isFavorite,
+            'promedio' => $promedio
         ]);
     }
 
-
-
-    
 
 
     #[Route('/{id}', name: 'app_vista_receta_delete', methods: ['POST'])]
@@ -219,7 +228,48 @@ class VistaRecetaController extends AbstractController
     }
 
 
+    #[Route('/calificar/{id}', name: 'app_calificar', methods: ['POST'])]
+    public function calificar(Receta $recetum, Request $request, Connection $connection): JsonResponse
+    {
+        $user = $this->getUser();
 
+        if (!$user) {
+            return new JsonResponse(['success' => false, 'error' => 'Usuario no autenticado'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $calificacion = isset($data['calificacion']) ? (int) $data['calificacion'] : null;
+
+        if ($calificacion < 1 || $calificacion > 5) {
+            return new JsonResponse(['success' => false, 'error' => 'Calificación inválida'], 400);
+        }
+
+        // Obtener el ID del usuario desde la base de datos
+        $userId = $connection->fetchOne('SELECT id FROM `user` WHERE email = ?', [$user->getUserIdentifier()]);
+
+        if (!$userId) {
+            return new JsonResponse(['success' => false, 'error' => 'Usuario no encontrado en la base de datos'], 404);
+        }
+
+        // Insertar o actualizar la calificación
+        $connection->executeStatement(
+            'INSERT INTO calificacion (usuario_id, receta_id, calificacion)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE calificacion = VALUES(calificacion)',
+            [$userId, $recetum->getId(), $calificacion]
+        );
+
+        // Obtener el promedio de calificaciones
+        $promedio = $connection->fetchOne(
+            'SELECT AVG(calificacion) FROM calificacion WHERE receta_id = ?',
+            [$recetum->getId()]
+        );
+
+        return new JsonResponse([
+            'success' => true,
+            'promedio' => $promedio !== null ? number_format($promedio, 1) : 'Sin calificaciones'
+        ]);
+    }
 
 
 

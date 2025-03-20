@@ -3,88 +3,127 @@
 {% block title %}Receta{% endblock %}
 
 {% block body %}
-<div class="container text-center">
-    <div id="recuadro">
-        <h1>Receta: {{ recetum.nombre }}</h1>
+<div class="container">
+    <div class="row">
+        <!-- Sección de la receta -->
+        <div class="col-md-9">
+            <div id="recuadro">
+                <h1>Receta: {{ recetum.nombre }}</h1>
 
-        <div id="receta-imagen" class="mb-4">
-            {% if recetum.png %}
-                <img src="{{ asset(recetum.png|slice(1)) }}" class="img-fluid mb-3">
-            {% else %}
-                <p>No hay imagen disponible</p>
-            {% endif %}
+                <div id="receta-imagen" class="mb-4">
+                    {% if recetum.png %}
+                        <img src="{{ asset(recetum.png|slice(1)) }}" class="img-fluid mb-3">
+                    {% else %}
+                        <p>No hay imagen disponible</p>
+                    {% endif %}
+                </div>
+
+                <div class="tabla-detalles mx-auto" style="max-width: 800px;">
+                    <table class="table table-bordered text-center">
+                        <tbody>
+                            <tr>
+                                <th>Nombre</th>
+                                <td>{{ recetum.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripción</th>
+                                <td>{{ recetum.descripcion }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tiempo de preparación</th>
+                                <td>{{ recetum.tiempoprep }} minutos</td>
+                            </tr>
+                            <tr>
+                                <th>Porciones</th>
+                                <td>{{ recetum.porciones }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dificultad</th>
+                                <td>{{ recetum.dificultad }}</td>
+                            </tr>
+                            <tr>
+                                <th>Pasos:</th>
+                                <td>
+                                    {% if recetum.pasos is not empty %}
+                                        <ol class="pasos-receta">
+                                            {% for paso in recetum.pasos %}
+                                                <li><p>{{ paso.descripcion }}</p></li>
+                                            {% endfor %}
+                                        </ol>
+                                    {% else %}
+                                        <p>No hay pasos disponibles</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Promedio de puntuación -->
+                <p><strong>Puntuación:</strong> <span id="puntuacion-promedio">{{ promedio is not null ? promedio : 'Sin calificaciones' }} ★</span></p>
+
+                <button onclick="window.history.back()" class="btn-back">Volver</button>
+
+                {% if app.user %}
+                    <button id="fav-button" class="btn-favorite" onclick="toggleFavorite({{ recetum.id }})">
+                        {{ isFavorite ? 'Eliminar de favoritos' : 'Añadir a favoritos' }}
+                    </button>
+                {% endif %}
+            </div>
         </div>
 
-        <div class="tabla-detalles mx-auto" style="max-width: 800px;">
-            <table class="table table-bordered text-center">
-                <tbody>
-                    <tr>
-                        <th>Nombre</th>
-                        <td>{{ recetum.nombre }}</td>
-                    </tr>
-                    <tr>
-                        <th>Descripción</th>
-                        <td>{{ recetum.descripcion }}</td>
-                    </tr>
-                    <tr>
-                        <th>Tiempo de preparación</th>
-                        <td>{{ recetum.tiempoprep }} minutos</td>
-                    </tr>
-                    <tr>
-                        <th>Porciones</th>
-                        <td>{{ recetum.porciones }}</td>
-                    </tr>
-                    <tr>
-                        <th>Dificultad</th>
-                        <td>{{ recetum.dificultad }}</td>
-                    </tr>
-                    <tr>
-                        <th>Pasos:</th>
-                        <td>
-                            {% if recetum.pasos is not empty %}
-                                <ol class="pasos-receta">
-                                    {% for paso in recetum.pasos %}
-                                        <li><p>{{ paso.descripcion }}</p></li>
-                                    {% endfor %}
-                                </ol>
-                            {% else %}
-                                <p>No hay pasos disponibles</p>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <button onclick="window.history.back()" class="btn-back">Volver</button>
-
+        <!-- Sección de calificación en el costado derecho -->
         {% if app.user %}
-            <button id="fav-button" class="btn-favorite" onclick="toggleFavorite({{ recetum.id }})">
-                {{ isFavorite ? 'Eliminar de favoritos' : 'Añadir a favoritos' }}
-            </button>
+        <div class="col-md-3 d-flex align-items-center justify-content-center">
+            <div class="rating-container">
+                <p><strong>Puntúe la receta:</strong></p>
+                <div class="rating-stars" data-recipe-id="{{ recetum.id }}">
+                    {% for i in 1..5 %}
+                        <span class="star" data-value="{{ i }}">&#9733;</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
         {% endif %}
     </div>
 </div>
+{% endblock %}
 
-<script>
-function toggleFavorite(recipeId) {
-    fetch('', {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({ recetaId: recipeId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const button = document.getElementById('fav-button');
-            button.textContent = data.action === 'added' ? 'Eliminar de favoritos' : 'Añadir a favoritos';
-        } else {
-            alert('Error al actualizar favoritos');
+{% block javascripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".star").forEach(star => {
+                star.addEventListener("click", function () {
+                    let rating = this.getAttribute("data-value");
+                    rateRecipe({{ recetum.id }}, rating);
+
+                    // Marcar todas las estrellas hasta la seleccionada
+                    document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+                    for (let i = 1; i <= rating; i++) {
+                        document.querySelector(`.star[data-value='${i}']`).classList.add("active");
+                    }
+                });
+            });
+        });
+
+        function rateRecipe(recipeId, rating) {
+            fetch(`/calificar/${recipeId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: JSON.stringify({ calificacion: rating })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("puntuacion-promedio").textContent = `Puntuación: ${data.promedio} ★`;
+                } else {
+                    alert("Error: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error en fetch:", error));
         }
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
+    </script>
 {% endblock %}
